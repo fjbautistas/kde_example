@@ -4,4 +4,4 @@ KDE implementation to simulation values through KernelDensity (sklearn) and gaus
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fjbautistas/kde_example/blob/master/bandwidths.ipynb/master)
 
 .. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/fjbautistas/kde_example/blob/master/bandwidths.ipynb/master
+ :target: https://mybinder.org/v2/gh/fjbautistas/kde_example/master
