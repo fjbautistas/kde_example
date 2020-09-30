@@ -3,4 +3,4 @@ KDE implementation for synthetic data of planetary systems. Here, I determine th
 
 Launch it in myBinder:
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fjbautistas/kde_example/master?filepath=bandwidths.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fjbautistas/kde_example/master)
