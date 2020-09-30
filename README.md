@@ -1,5 +1,5 @@
 # kde_example
-KDE implementation to simulation values through KernelDensity (sklearn) and gaussian_kde (scipy), there are "pdfs" in 2d and 3d
+KDE implementation for synthetic data of planetary systems. Here, I determine the optimal bandwidth for multivariate probability density function through KernelDensity (sklearn) and gaussian_kde (scipy). To plot 3d pdfs is used plotly library. 
 
 Launch it in myBinder:
 
