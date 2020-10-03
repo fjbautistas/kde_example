@@ -5,5 +5,7 @@ Launch it in binder:
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/fjbautistas/kde_example/master)
 
+The python code is the same notebook, but without plots. It just has the multivariate case, in order to run it in a cluster. 
+
 Some usefull infromation of Kernel density estimation (KDE) and the bandwith problem in 
 [slides](https://github.com/fjbautistas/kde_example/blob/master/slides/KDE.pdf)
