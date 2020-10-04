@@ -59,6 +59,7 @@ class multidim_bw(object):
         
         self.ndim_bw  = self.grid.best_estimator_.bandwidth
         self.ndim_pdf = np.exp(self.grid.best_estimator_.score_samples(self.space).reshape(self.n_grid[0].shape))  #get the pdf
+        return self.ndim_pdf 
 
 #================================== example  ============================
 
