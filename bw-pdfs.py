@@ -25,15 +25,15 @@ class multidim_bw(object):
 
     def __init__(self, *args):
         
-        dx, length, deciamls = .2, 100, 2       # some constants 
-        self.min, self.max = [], []            # it will keep information of min and max values  
+        dx, length, deciamls = .2, 100, 2      # some constants 
+        self.diffmin, self.max = [], []            # it will keep information of min and max values  
         self.var_values = []                   # Their components are objects from class bw_optimal
         self.var_grids  = [] 
         
         for i in range(len(args)):             # It calls the class bw_optimal to standarize data
             variable = args[i].values          # original variable
                                             
-            self.x = (variable-variable.mean())/variable.std()  # standarization:
+            self.x = (variable-variable.mean())/variable.std()  # standarization
             
             self.x_grid = np.around(np.linspace(self.x.min()-dx,
                                                 self.x.max()+dx,
@@ -42,8 +42,12 @@ class multidim_bw(object):
             self.var_values.append(self.x)     # std values
             self.var_grids.append(self.x_grid) # lists of x_grids  
             
-            self.min.append(self.x.min()); self.max.append(self.x.max()) 
+            self.max.append(self.x.max()) 
             
+            #distance between data
+            m = np.abs(np.diff(self.x))
+            self.diffmin.append(min(m[m>0]))
+        
         self.n_grid = np.meshgrid(*self.var_grids)
         ll = [self.n_grid[i].ravel() for i in range(len(self.n_grid))]
         self.space  = np.vstack([*ll]).T   # It generates the space for the pdf
@@ -52,14 +56,14 @@ class multidim_bw(object):
         
     def pdf_ndim(self):
         self.grid = GridSearchCV(KernelDensity(), 
-                                 {'bandwidth': np.linspace(0.038, 
-                                                           3,
-                                                           30)}, cv=20)
+                                 {'bandwidth': np.linspace(min(self.diffmin), 
+                                                           3*self.x.std(),
+                                                           50)}, cv=20)
         self.grid.fit(self.data)
         
         self.ndim_bw  = self.grid.best_estimator_.bandwidth
         self.ndim_pdf = np.exp(self.grid.best_estimator_.score_samples(self.space).reshape(self.n_grid[0].shape))  #get the pdf
-        return self.ndim_pdf 
+        
 
 #================================== example  ============================
 
