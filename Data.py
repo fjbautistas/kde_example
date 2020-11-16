@@ -40,6 +40,14 @@ dl = dl.drop(["massefficiency"], axis=1)
 dh = dh.drop(["massefficiency"], axis=1)
 
 
+
+# reorder
+
+dn = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+dl = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+dh = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+
+
 dn.to_csv(r'data/no_p.csv', index = False)
 dl.to_csv(r'data/low_p.csv', index = False)
 dh.to_csv(r'data/high_p.csv', index = False)
