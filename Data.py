@@ -1,9 +1,6 @@
 #=============================== libraries ==============================
 import numpy as np
 import pandas as pd
-from sklearn.neighbors import KernelDensity
-from sklearn.model_selection import GridSearchCV
-from scipy.stats import gaussian_kde
 import warnings; warnings.simplefilter('ignore')
 #============================== Data Variables ==========================
 
@@ -44,5 +41,5 @@ dh = dh.drop(["massefficiency"], axis=1)
 
 
 dn.to_csv(r'data/no_p.csv', index = False)
-dl.to_csv(r'data/ow_p.csv', index = False)
+dl.to_csv(r'data/low_p.csv', index = False)
 dh.to_csv(r'data/high_p.csv', index = False)
