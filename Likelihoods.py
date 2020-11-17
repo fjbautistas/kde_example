@@ -58,7 +58,7 @@ class optimal_pdf(object):
 #============================================================================================================    
 #================================================ Likelihoods ===============================================
 #============================================================================================================    
-
+'''
 # md
 md_n = optimal_pdf(dn.ms, dn.metal, dn.md); like_md_n = md_n.pdf();
 md_l = optimal_pdf(dl.ms, dl.metal, dl.md); like_md_l = md_l.pdf(); 
@@ -66,7 +66,7 @@ md_h = optimal_pdf(dh.ms, dh.metal, dh.md); like_md_h = md_h.pdf();
 
 likelihoods_md = pd.DataFrame({'md_n':like_md_n, 'md_l':like_md_l, 'md_h':like_md_h})
 likelihoods_md.to_csv("data/likelihoods/like_md.csv")
-'''
+
 # com
 com_n = optimal_pdf(dn.ms, dn.metal, dn.com); like_com_n = com_n.pdf(); 
 com_l = optimal_pdf(dl.ms, dl.metal, dl.com); like_com_l = com_l.pdf(); 
@@ -115,7 +115,7 @@ ngi_h = optimal_pdf(dh.ms, dh.metal, dh.ngi); like_ngi_h = ngi_h.pdf();
 
 likelihoods_ngi = pd.DataFrame({'ngi_n':like_ngi_n, 'ngi_l':like_ngi_l, 'ngi_h':like_ngi_h})
 likelihoods_ngi.to_csv("data/likelihoods/like_ngi.csv")
-
+'''
 # Njup total mass
 ntp_n = optimal_pdf(dn.ms, dn.metal, dn.npt); like_ntp_n = ntp_n.pdf(); 
 ntp_l = optimal_pdf(dl.ms, dl.metal, dl.npt); like_ntp_l = ntp_l.pdf();
@@ -125,7 +125,6 @@ likelihoods_ntp = pd.DataFrame({'ntp_n':like_ntp_n, 'ntp_l':like_ntp_l, 'ntp_h':
 likelihoods_ntp.to_csv("data/likelihoods/like_ntp.csv")
 
 '''
-
 # tau gass 
 tgas_n = optimal_pdf(dn.ms, dn.metal, dn.taugas); like_tgas_n = tgas_n.pdf(); 
 tgas_l = optimal_pdf(dl.ms, dl.metal, dl.taugas); like_tgas_l = tgas_l.pdf();
@@ -133,4 +132,4 @@ tgas_h = optimal_pdf(dh.ms, dh.metal, dh.taugas); like_tgas_h = tgas_h.pdf();
 
 likelihoods_tgas = pd.DataFrame({'tgas_n':like_tgas_n, 'tgas_l':like_tgas_l, 'tgas_h':like_tgas_h})
 likelihoods_tgas.to_csv("data/likelihoods/like_tgas.csv")
-
+'''
