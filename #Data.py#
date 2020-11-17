@@ -34,11 +34,10 @@ dn = dn.assign(Mrock = (dn["Mtp"]-(dn["Mjup"]*(mass*10**(-4))))*mass_earth)
 dl = dl.assign(Mrock = (dl["Mtp"]-(dl["Mjup"]*(mass*10**(-4))))*mass_earth)
 dh = dh.assign(Mrock = (dh["Mtp"]-(dh["Mjup"]*(mass*10**(-4))))*mass_earth)
 
-
 # reorder
 dn = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
-dl = dl[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
-dh = dh[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+dl = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+dh = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
 
 
 dn.to_csv(r'data/no_p.csv', index = False)
