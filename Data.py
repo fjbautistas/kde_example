@@ -8,12 +8,12 @@ mass = (9.547919)
 mass_jup = (1/mass)*(10**4)
 mass_earth = 332946
 
-dn=pd.read_csv('data/proc_no_pert.csv',index_col=None, usecols = ["ms","md","metal","taugas","com",
-                                                                  "massefficiency","nplanets", "ngi"]); 
-dl=pd.read_csv('data/proc_lo_pert.csv',index_col=None, usecols = ["ms","md","metal","taugas","com",
-                                                                  "massefficiency","nplanets", "ngi"]); 
-dh=pd.read_csv('data/proc_hi_pert.csv',index_col=None, usecols = ["ms","md","metal","taugas","com",
-                                                                  "massefficiency","nplanets", "ngi"]); 
+dn=pd.read_csv('data/proc_no_pert.csv',index_col=None)#, usecols = ["ms","md","metal","taugas","com",
+                                                      #            "massefficiency","nplanets", "ngi"]); 
+dl=pd.read_csv('data/proc_lo_pert.csv',index_col=None)#, usecols = ["ms","md","metal","taugas","com",
+                                                      #            "massefficiency","nplanets", "ngi"]); 
+dh=pd.read_csv('data/proc_hi_pert.csv',index_col=None)#, usecols = ["ms","md","metal","taugas","com",
+                                                      #            "massefficiency","nplanets", "ngi"]); 
 #--------total rocky planets -----
 dn = dn.assign(npt = dn["nplanets"]-dn["ngi"])
 dl = dl.assign(npt = dl["nplanets"]-dl["ngi"])
@@ -39,10 +39,7 @@ dn = dn.drop(["massefficiency"], axis=1)
 dl = dl.drop(["massefficiency"], axis=1)
 dh = dh.drop(["massefficiency"], axis=1)
 
-
-
 # reorder
-
 dn = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
 dl = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
 dh = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]

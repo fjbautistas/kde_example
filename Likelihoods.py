@@ -60,21 +60,21 @@ class optimal_pdf(object):
 #============================================================================================================    
 
 # md
-'''
 md_n = optimal_pdf(dn.ms, dn.metal, dn.md); like_md_n = md_n.pdf();
 md_l = optimal_pdf(dl.ms, dl.metal, dl.md); like_md_l = md_l.pdf(); 
 md_h = optimal_pdf(dh.ms, dh.metal, dh.md); like_md_h = md_h.pdf();
 
 likelihoods_md = pd.DataFrame({'md_n':like_md_n, 'md_l':like_md_l, 'md_h':like_md_h})
-likelihoods_md.to_csv("data/like_md.csv")
-
+likelihoods_md.to_csv("data/likelihoods/like_md.csv")
+'''
 # com
 com_n = optimal_pdf(dn.ms, dn.metal, dn.com); like_com_n = com_n.pdf(); 
 com_l = optimal_pdf(dl.ms, dl.metal, dl.com); like_com_l = com_l.pdf(); 
 com_h = optimal_pdf(dh.ms, dh.metal, dh.com); like_com_h = com_h.pdf(); 
 
 likelihoods_com = pd.DataFrame({'com_n':like_com_n, 'com_l':like_com_l, 'com_h':like_com_h})
-likelihoods_com.to_csv("data/like_com.csv")
+likelihoods_com.to_csv("data/likelihoods/like_com.csv")
+
 
 # Mtp total mass
 Mtp_n = optimal_pdf(dn.ms, dn.metal, dn.Mtp); like_Mtp_n = Mtp_n.pdf(); 
@@ -82,7 +82,7 @@ Mtp_l = optimal_pdf(dl.ms, dl.metal, dl.Mtp); like_Mtp_l = Mtp_l.pdf();
 Mtp_h = optimal_pdf(dh.ms, dh.metal, dh.Mtp); like_Mtp_h = Mtp_h.pdf(); 
 
 likelihoods_Mtp = pd.DataFrame({'Mtp_n':like_Mtp_n, 'Mtp_l':like_Mtp_l, 'Mtp_h':like_Mtp_h})
-likelihoods_Mtp.to_csv("data/like_Mtp.csv")
+likelihoods_Mtp.to_csv("data/likelihoods/like_Mtp.csv")
 
 # Mjup total mass
 Mjup_n = optimal_pdf(dn.ms, dn.metal, dn.Mjup); like_Mjup_n = Mjup_n.pdf(); 
