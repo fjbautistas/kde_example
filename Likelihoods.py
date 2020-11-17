@@ -100,7 +100,7 @@ Mrock_h = optimal_pdf(dh.ms, dh.metal, dh.Mrock); like_Mrock_h = Mrock_h.pdf();
 likelihoods_Mrock = pd.DataFrame({'Mrock_n':like_Mrock_n, 'Mrock_l':like_Mrock_l, 'Mrock_h':like_Mrock_h})
 likelihoods_Mrock.to_csv("data/likelihoods/like_Mrock.csv")
 
-# Mrock total mass
+# nplanets total mass
 nplanets_n = optimal_pdf(dn.ms, dn.metal, dn.nplanets); like_nplanets_n = nplanets_n.pdf(); 
 nplanets_l = optimal_pdf(dl.ms, dl.metal, dl.nplanets); like_nplanets_l = nplanets_l.pdf(); 
 nplanets_h = optimal_pdf(dh.ms, dh.metal, dh.nplanets); like_nplanets_h = nplanets_h.pdf();
@@ -116,7 +116,7 @@ ngi_h = optimal_pdf(dh.ms, dh.metal, dh.ngi); like_ngi_h = ngi_h.pdf();
 likelihoods_ngi = pd.DataFrame({'ngi_n':like_ngi_n, 'ngi_l':like_ngi_l, 'ngi_h':like_ngi_h})
 likelihoods_ngi.to_csv("data/likelihoods/like_ngi.csv")
 '''
-# Njup total mass
+# Npt total mass
 ntp_n = optimal_pdf(dn.ms, dn.metal, dn.npt); like_ntp_n = ntp_n.pdf(); 
 ntp_l = optimal_pdf(dl.ms, dl.metal, dl.npt); like_ntp_l = ntp_l.pdf();
 ntp_h = optimal_pdf(dh.ms, dh.metal, dh.npt); like_ntp_h = ntp_h.pdf();
