@@ -1,6 +1,13 @@
 import numpy as np
 import pandas as pd
 from scipy import stats
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+from scipy import stats
+import warnings; warnings.simplefilter('ignore')
+mpl.rcParams['text.usetex'] = True
+mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
 
 #========================================== data ============================================
 dim = 150
@@ -93,4 +100,66 @@ class Marginal():
         self.p_50 = self.z[np.argmin((inte-0.50)**2)]
         self.p_75 = self.z[np.argmin((inte-0.75)**2)]
 
- #-------- plot -------       
+#-------- For plots -------
+
+def mplot_2v(marginal_md, marginal_tau, sys):
+    names = [r"Mass of the disk $M_d$ ($M_\odot$)",r"Time of gas dissipation $\tau_g$ (y)"]
+    sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
+    size = 15
+    m = [marginal_md, marginal_tau]
+    x = [marginal_md.space[2], marginal_tau.space[2]]
+    y = [marginal_md.marginal/marginal_md.marginal.max(),
+         marginal_tau.marginal/marginal_tau.marginal.max()]
+
+    #Figure:
+    fig, ax = plt.subplots(1,2, figsize=(12,5))
+
+    for i in range(0,2):
+        
+        ax[i].plot(x[i], y[i], label = sym[i], lw = 2)
+        ax[i].set_xlabel(names[i],fontsize = size)
+        ax[i].set_ylabel(sym[i],fontsize = size)
+        ax[i].tick_params(axis='both', labelsize=size-2)
+        
+        if i == 0:
+            ax[i].axvline(x = m[i].p_25, ls='--', c="C1", label = r"25\% = " + "%.2f"%m[i].p_25)
+            ax[i].axvline(x = m[i].p_50, ls='--', c="C2", label = r"50\% = " + "%.2f"%m[i].p_50)
+            ax[i].axvline(x = m[i].p_75, ls='--', c="C3", label = r"75\% = " + "%.2f"%m[i].p_75)
+
+        if i == 1:
+            ax[i].axvline(x = m[i].p_25, ls='--', c="C1", label = r"25\% = " + "{:.2e}".format(m[i].p_25))
+            ax[i].axvline(x = m[i].p_50, ls='--', c="C2", label = r"50\% = " + "{:.2e}".format(m[i].p_50))
+            ax[i].axvline(x = m[i].p_75, ls='--', c="C3", label = r"75\% = " + "{:.2e}".format(m[i].p_75))
+            plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
+
+        ax[i].legend(fontsize=size-1)
+    
+    plt.subplots_adjust(hspace=1.5)
+    fig.tight_layout()
+    plt.savefig("images/md_tau/"+sys+".pdf")
+    plt.show()
+
+
+#======================================= names  ===========================================
+
+names = [r"Mass of Disk $M_d$ ($M_\odot$)",
+         r"Dissipation time $\tau_g$ (y)",
+         r"Center of mass $r_{\text{cm}}$ (AU)",
+         r"Total planetary mass $M_{tp}$ ($M_\odot$)",
+         r"Gian planetary mass $M_{\jupiter}$ ($M_\text{jup}$)",
+         r"Rocky planetary mass $M_{r}$ ($M_{\oplus}$)",
+         r"Number of total planets $N_{t}$",
+         r"Number of giants $N_{\jupiter}$",
+         r"Number of giants $N_{t}$"]
+
+
+sym   = [r"$p\left(M_d\right)$",
+         r"$p\left(\tau_g\right)$",
+         r"$p\left(r_\text{cm}\right)$",
+         r"$p\left(M_{tp}\right)$",
+         r"$p\left(M_{\jupiter}\right)$",
+         r"$p\left(M_{r}\right)$",
+         r"$p\left(N_{t}\right)$",
+         r"$p\left(N_{\jupiter}\right)$",
+         r"$p\left(N_{\oplus}\right)$"]    
+
