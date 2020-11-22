@@ -9,7 +9,7 @@ import warnings; warnings.simplefilter('ignore')
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
 
-#========================================== data ============================================
+#========================================== data ==========================================
 dim = 150
 # observational data:
 obs_data = pd.read_csv('data/observations.csv',index_col=None); #without pertubtations 
@@ -28,7 +28,7 @@ ngi = pd.read_csv('data/likelihoods/like_ngi.csv',index_col=None)
 ntp = pd.read_csv('data/likelihoods/like_ntp.csv',index_col=None)
 nplanets = pd.read_csv('data/likelihoods/like_nplanets.csv',index_col=None)
 
-#===================================== likelihoods ==========================================
+#===================================== likelihoods ========================================
 like_Md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
@@ -39,6 +39,27 @@ like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,dim) 
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_ntp = [ntp[str(ntp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+
+#======================================= names  ===========================================
+names = [r"Mass of Disk $M_d$ ($M_\odot$)",
+         r"Dissipation time $\tau_g$ (y)",
+         r"Center of mass $r_{\text{cm}}$ (AU)",
+         r"Total planetary mass $M_{tp}$ ($M_\odot$)",
+         r"Gian planetary mass $M_{\jupiter}$ ($M_\text{jup}$)",
+         r"Rocky planetary mass $M_{r}$ ($M_{\oplus}$)",
+         r"Number of total planets $N_{t}$",
+         r"Number of giants $N_{\jupiter}$",
+         r"Number of giants $N_{t}$"]
+
+sym   = [r"$p\left(M_d\right)$",
+         r"$p\left(\tau_g\right)$",
+         r"$p\left(r_\text{cm}\right)$",
+         r"$p\left(M_{tp}\right)$",
+         r"$p\left(M_{\jupiter}\right)$",
+         r"$p\left(M_{r}\right)$",
+         r"$p\left(N_{t}\right)$",
+         r"$p\left(N_{\jupiter}\right)$",
+         r"$p\left(N_{\oplus}\right)$"]    
 
 #======================================= Methods ===========================================
 class prior():
@@ -101,7 +122,6 @@ class Marginal():
         self.p_75 = self.z[np.argmin((inte-0.75)**2)]
 
 #-------- For plots -------
-
 def mplot_2v(marginal_md, marginal_tau, sys):
     names = [r"Mass of the disk $M_d$ ($M_\odot$)",r"Time of gas dissipation $\tau_g$ (y)"]
     sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
@@ -122,14 +142,26 @@ def mplot_2v(marginal_md, marginal_tau, sys):
         ax[i].tick_params(axis='both', labelsize=size-2)
         
         if i == 0:
-            ax[i].axvline(x = m[i].p_25, ls='--', c="C1", label = r"25\% = " + "%.2f"%m[i].p_25)
-            ax[i].axvline(x = m[i].p_50, ls='--', c="C2", label = r"50\% = " + "%.2f"%m[i].p_50)
-            ax[i].axvline(x = m[i].p_75, ls='--', c="C3", label = r"75\% = " + "%.2f"%m[i].p_75)
+            ax[i].axvline(x = m[i].p_25,
+                          ls='--', c="C1",
+                          label = r"25\% = " + "%.2f"%m[i].p_25)
+            ax[i].axvline(x = m[i].p_50,
+                          ls='--', c="C2",
+                          label = r"50\% = " + "%.2f"%m[i].p_50)
+            ax[i].axvline(x = m[i].p_75,
+                          ls='--', c="C3",
+                          label = r"75\% = " + "%.2f"%m[i].p_75)
 
         if i == 1:
-            ax[i].axvline(x = m[i].p_25, ls='--', c="C1", label = r"25\% = " + "{:.2e}".format(m[i].p_25))
-            ax[i].axvline(x = m[i].p_50, ls='--', c="C2", label = r"50\% = " + "{:.2e}".format(m[i].p_50))
-            ax[i].axvline(x = m[i].p_75, ls='--', c="C3", label = r"75\% = " + "{:.2e}".format(m[i].p_75))
+            ax[i].axvline(x = m[i].p_25,
+                          ls='--', c="C1",
+                          label = r"25\% = " + "{:.2e}".format(m[i].p_25))
+            ax[i].axvline(x = m[i].p_50,
+                          ls='--', c="C2",
+                          label = r"50\% = " + "{:.2e}".format(m[i].p_50))
+            ax[i].axvline(x = m[i].p_75,
+                          ls='--', c="C3",
+                          label = r"75\% = " + "{:.2e}".format(m[i].p_75))
             plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
 
         ax[i].legend(fontsize=size-1)
@@ -138,28 +170,3 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     fig.tight_layout()
     plt.savefig("images/md_tau/"+sys+".pdf")
     plt.show()
-
-
-#======================================= names  ===========================================
-
-names = [r"Mass of Disk $M_d$ ($M_\odot$)",
-         r"Dissipation time $\tau_g$ (y)",
-         r"Center of mass $r_{\text{cm}}$ (AU)",
-         r"Total planetary mass $M_{tp}$ ($M_\odot$)",
-         r"Gian planetary mass $M_{\jupiter}$ ($M_\text{jup}$)",
-         r"Rocky planetary mass $M_{r}$ ($M_{\oplus}$)",
-         r"Number of total planets $N_{t}$",
-         r"Number of giants $N_{\jupiter}$",
-         r"Number of giants $N_{t}$"]
-
-
-sym   = [r"$p\left(M_d\right)$",
-         r"$p\left(\tau_g\right)$",
-         r"$p\left(r_\text{cm}\right)$",
-         r"$p\left(M_{tp}\right)$",
-         r"$p\left(M_{\jupiter}\right)$",
-         r"$p\left(M_{r}\right)$",
-         r"$p\left(N_{t}\right)$",
-         r"$p\left(N_{\jupiter}\right)$",
-         r"$p\left(N_{\oplus}\right)$"]    
-
