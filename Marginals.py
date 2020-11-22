@@ -16,39 +16,39 @@ variables   = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi","npt"]
 
 #=============================== slect the system ===============================
 
-s = ["Kepler-289", "GJ 9827", "K2-290", "K2-3", "WASP-47",
+s= ["Kepler-289", "GJ 9827", "K2-290", "K2-3", "WASP-47",
      "HD 38529", "K2-38", "EPIC 249893012", "GJ 9827", "Kepler-18"]
 
-sys = s[9]
-
-systm = obs_data[obs_data.sys_name == sys] 
-systm
-#-------- prior ------
-prior_sys = []
-for i in range(len(data)):
+def sistem(system):
     
-    p = prior(data[i]["ms"],data[i]["metal"],
-              [systm.ms, systm.dms],
-              [systm.metal,systm.dmetal])
-    p.prior_pdf()
-    prior_sys.append(p.pdf_prior)
+    systm = obs_data[obs_data.sys_name == sys] 
+    systm
+    #-------- prior ------
+    prior_sys = []
+    for i in range(len(data)):
+    
+        p = prior([data[i]["ms"],data[i]["metal"]],
+                  [[systm.ms, systm.dms],
+                   [systm.metal,systm.dmetal]])
+        p.prior_pdf()
+        prior_sys.append(p.pdf_prior)
 
-#-----likelihoods-----
-marginals = []
-for n, var in enumerate(likelihoods):
-    M = []
-    for  i in range(len(data)):
-        marginal = Marginal(var[i],prior_sys[i],
-                            data[i]["ms"],data[i]["metal"],
-                            data[i][variables[n]])
-        marginal.pdf()
-        M.append(marginal)
-        
-    marginals.append(M)
+    #-----likelihoods-----
+    marginals = []
+    for n, var in enumerate(likelihoods):
+        M = []
+        for  i in range(len(data)):
+            marginal = Marginal(var[i],prior_sys[i],
+                                data[i]["ms"],data[i]["metal"],
+                                data[i][variables[n]])
+            marginal.pdf()
+            M.append(marginal)
+            marginals.append(M)
 
 #================================ marginal plots ===============================
 
-mplot_2v(marginals[0][0],marginals[1][0], sys)
+#for j in range(len(s)):
+#    mplot_2v(marginals[i][0],marginals[i][0], s[j])
     
 
 

@@ -104,8 +104,7 @@ class Marginal():
     def __init__(self, like, prior, *args):
                 
         self.like = like; self.prior= prior 
-        self.space = [np.linspace(args[i].min(),args[i].max(), 
-                                  150) for i in range(len(args))]
+        self.space = [np.linspace(args[i].min(),args[i].max(),150) for i in range(len(args))]
     
         self.data = np.vstack([*args]).T
         self.data_std = (self.data-np.mean(self.data, axis=0))/np.std(self.data, axis=0) # standarization
@@ -136,6 +135,45 @@ class Marginal():
 
 #-------- For plots -------
 def mplot_2v(marginal_md, marginal_tau, sys):
+    names = [r"Mass of the disk $M_d$ ($M_\odot$)",r"Time of gas dissipation $\tau_g$ (y)"]
+    sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
+    size = 15
+    m = [marginal_md, marginal_tau]
+    x = [marginal_md.space[2], marginal_tau.space[2]]
+    y = [marginal_md.marginal/marginal_md.marginal.max(),
+         marginal_tau.marginal/marginal_tau.marginal.max()]
+    #Figure:
+    fig, ax = plt.subplots(1,2, figsize=(12,5))
+    for i in range(0,2):
+        ax[i].plot(x[i], y[i], label = sym[i], lw = 2)
+        ax[i].set_xlabel(names[i],fontsize = size)
+        ax[i].set_ylabel(sym[i],fontsize = size)
+        ax[i].tick_params(axis='both', labelsize=size-2)
+        if i == 0:
+            ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
+                          label = r"25\% = " + "%.2f"%m[i].p_25)
+            ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
+                          label = r"50\% = " + "%.2f"%m[i].p_50)
+            ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
+                          label = r"75\% = " + "%.2f"%m[i].p_75)
+        if i == 1:
+            ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
+                          label = r"25\% = " + "{:.2e}".format(m[i].p_25))
+            ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
+                          label = r"50\% = " + "{:.2e}".format(m[i].p_50))
+            ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
+                          label = r"75\% = " + "{:.2e}".format(m[i].p_75))
+            plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
+
+        ax[i].legend(fontsize=size-1)
+    
+    plt.subplots_adjust(hspace=1.5)
+    fig.tight_layout()
+    plt.savefig("images/md_tau/"+sys+".pdf")
+    plt.show()
+
+    
+def mplot_3v(marginal_md, marginal_tau, sys):
     names = [r"Mass of the disk $M_d$ ($M_\odot$)",r"Time of gas dissipation $\tau_g$ (y)"]
     sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
     size = 15
