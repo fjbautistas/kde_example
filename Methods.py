@@ -66,6 +66,12 @@ sym   = [r"$p\left(M_d\right)$",
          r"$p\left(N_{\oplus}\right)$"]    
 
 #======================================= Methods ===========================================
+#--------significant figures
+from math import log10, floor
+def round_sig(x, sig=2):
+    return round(x, sig-int(floor(log10(abs(x))))-1)
+
+#------- prior -------
 #2d and 3d varbs are a list of variables and args are a lsit of org values [value, error] 
 class prior():
     
@@ -98,7 +104,7 @@ class prior():
             prior = (((M_ones*self.pdfs[0]).T*self.pdfs[1]).T*self.pdfs[2]).T
             self.pdf_prior = prior
             
-#------ Marginal ------
+#-------- Marginal --------
 class Marginal():
     
     def __init__(self, like, prior, *args):
@@ -135,9 +141,9 @@ class Marginal():
 
 #-------- For plots -------
 def mplot_2v(marginal_md, marginal_tau, sys):
-    names = [r"Mass of the disk $M_d$ ($M_\odot$)",r"Time of gas dissipation $\tau_g$ (y)"]
+    names = [r"Mass of the disk $M_d$ [$M_\odot]$",r"Time of gas dissipation $\tau_g$ [y]"]
     sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
-    size = 15
+    size, sf  = 15, 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
     y = [marginal_md.marginal/marginal_md.marginal.max(),
@@ -145,24 +151,24 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     #Figure:
     fig, ax = plt.subplots(1,2, figsize=(12,5))
     for i in range(0,2):
-        ax[i].plot(x[i], y[i], label = sym[i], lw = 2)
+        ax[i].plot(x[i], y[i], label = "Probability " + sym[i], lw = 2)
         ax[i].set_xlabel(names[i],fontsize = size)
         ax[i].set_ylabel(sym[i],fontsize = size)
         ax[i].tick_params(axis='both', labelsize=size-2)
         if i == 0:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + "%.3g"%m[i].p_25)
+                          label = r"25\% = " + str(round_sig(m[i].p_25, sf)) + r' $M_\odot$')
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
-                          label = r"50\% = " + "%.3g"%m[i].p_50)
+                          label = r"50\% = " + str(round_sig(m[i].p_50, sf)) + r' $M_\odot$')
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
-                          label = r"75\% = " + "%.3g"%m[i].p_75)
+                          label = r"75\% = " + str(round_sig(m[i].p_75, sf)) + r' $M_\odot$')
         if i == 1:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + "{:.2e}".format(m[i].p_25))
+                          label = r"25\% = " + "{:.1e}".format(m[i].p_25) + " y")
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
-                          label = r"50\% = " + "{:.2e}".format(m[i].p_50))
+                          label = r"50\% = " + "{:.1e}".format(m[i].p_50) + " y")
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
-                          label = r"75\% = " + "{:.2e}".format(m[i].p_75))
+                          label = r"75\% = " + "{:.1e}".format(m[i].p_75) + " y")
             plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
 
         ax[i].legend(fontsize=size-1)
@@ -170,14 +176,14 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     plt.subplots_adjust(hspace=1.5)
     fig.tight_layout()
     plt.savefig("images/md_tau/"+sys+".pdf")
-    plt.show()
+    #plt.show()
 
 #------------------    
 
 def mplot_com(marginal_com, obs, sys):
-    names, sym = r"Center of mass $r_\text{cm}$ (AU)", r"$p\left(r_\text{cm}\right)$"
+    names, sym = r"Center of mass $r_\text{cm}$ [AU]", r"$p\left(r_\text{cm}\right)$"
     titles = ["No perturbations","Low perturbations","High perturbations"]
-    size = 15
+    size, sf = 15, 2
 
     x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
     y = [marginal_com[i].marginal/marginal_com[i].marginal.max()
@@ -187,20 +193,20 @@ def mplot_com(marginal_com, obs, sys):
     fig, ax = plt.subplots(1, 3, sharey=True, figsize=(15,5))
 
     for i in range(0,3):
-        ax[i].plot(x[i], y[i], label = sym, lw = 2)
+        ax[i].plot(x[i], y[i], label =  "Probability " +sym, lw = 2)
         ax[i].set_xlabel(names,fontsize = size)
         if i==0:
             ax[i].set_ylabel(sym,fontsize = size)
            
         ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
-                      label = r"25\% = " + "%.3g"%marginal_com[i].p_25)
+                      label = r"25\% = " + str(round_sig(marginal_com[i].p_25, sf)) + " AU")
         ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2",
-                      label = r"50\% = " + "%.3g"%marginal_com[i].p_50)
+                      label = r"50\% = " + str(round_sig(marginal_com[i].p_50, sf)) + " AU" )
         ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3",
-                      label = r"75\% = " + "%.3g"%marginal_com[i].p_75)
+                      label = r"75\% = " + str(round_sig(marginal_com[i].p_75, sf)) + " AU")
 
         ax[i].axvline(x = obs, ls='--', c="k",
-                      label = r"observed = " + "%.3g"%obs[0])
+                      label = r"observed = " + str(round_sig(obs, sf)) + " AU" )
 
         ax[i].tick_params(axis='both', labelsize=size-2)
         ax[i].set_title(titles[i], fontsize = size-1)
@@ -209,5 +215,5 @@ def mplot_com(marginal_com, obs, sys):
     plt.subplots_adjust(hspace=-.5)
     fig.tight_layout()
     plt.savefig("images/com/"+sys+".pdf")
-    plt.show()
+    #plt.show()
 
