@@ -45,12 +45,12 @@ like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,
                                                                    dim) for i in range(1,4)]
 
 #======================================= names ===========================================
-names = [r"Mass of Disk $M_d$ ($M_\odot$)",
-         r"Dissipation time $\tau_g$ (y)",
-         r"Center of mass $r_{\text{cm}}$ (AU)",
-         r"Total planetary mass $M_{tp}$ ($M_\odot$)",
-         r"Gian planetary mass $M_{\jupiter}$ ($M_\text{jup}$)",
-         r"Rocky planetary mass $M_{r}$ ($M_{\oplus}$)",
+names = [r"Mass of Disk $M_d$ [$M_\odot$]",
+         r"Dissipation time $\tau_g$ [y]",
+         r"Center of mass $r_{\text{cm}}$ [AU]",
+         r"Total planetary mass $M_{tp}$ [$M_\odot$]",
+         r"Gian planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
+         r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]",
          r"Number of total planets $N_{t}$",
          r"Number of giants $N_{\jupiter}$",
          r"Number of giants $N_{t}$"]
@@ -63,7 +63,9 @@ sym   = [r"$p\left(M_d\right)$",
          r"$p\left(M_{r}\right)$",
          r"$p\left(N_{t}\right)$",
          r"$p\left(N_{\jupiter}\right)$",
-         r"$p\left(N_{\oplus}\right)$"]    
+         r"$p\left(N_{\oplus}\right)$"]
+
+titles = ["No perturbations","Low perturbations","High perturbations"]
 
 #======================================= Methods ===========================================
 #--------significant figures
@@ -84,7 +86,6 @@ class prior():
         self.data_std = (self.data-np.mean(self.data, axis=0))\
             /np.std(self.data, axis=0) # standarization     
 
-            
     def prior_pdf(self):
         for i in range(len(self.org_data[0])):
             x = np.linspace(self.data_std[:,i].min(),
@@ -141,8 +142,8 @@ class Marginal():
 
 #-------- For plots -------
 def mplot_2v(marginal_md, marginal_tau, sys):
-    names = [r"Mass of the disk $M_d$ [$M_\odot]$",r"Time of gas dissipation $\tau_g$ [y]"]
-    sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
+    name = [names[0], names[1]]
+    sy   = [sym[0], sym[1]] 
     size, sf  = 15, 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
@@ -151,9 +152,9 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     #Figure:
     fig, ax = plt.subplots(1,2, figsize=(12,5))
     for i in range(0,2):
-        ax[i].plot(x[i], y[i], label = "Probability " + sym[i], lw = 2)
-        ax[i].set_xlabel(names[i],fontsize = size)
-        ax[i].set_ylabel(sym[i],fontsize = size)
+        ax[i].plot(x[i], y[i], label = "Probability " + sy[i], lw = 2)
+        ax[i].set_xlabel(name[i],fontsize = size)
+        ax[i].set_ylabel(sy[i],fontsize = size)
         ax[i].tick_params(axis='both', labelsize=size-2)
         if i == 0:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
@@ -179,10 +180,8 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     #plt.show()
 
 #------------------    
-
 def mplot_com(marginal_com, obs, sys):
-    names, sym = r"Center of mass $r_\text{cm}$ [AU]", r"$p\left(r_\text{cm}\right)$"
-    titles = ["No perturbations","Low perturbations","High perturbations"]
+    name, sy = names[2], sym[2]
     size, sf = 15, 2
 
     x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
@@ -193,10 +192,10 @@ def mplot_com(marginal_com, obs, sys):
     fig, ax = plt.subplots(1, 3, sharey=True, figsize=(15,5))
 
     for i in range(0,3):
-        ax[i].plot(x[i], y[i], label =  "Probability " +sym, lw = 2)
-        ax[i].set_xlabel(names,fontsize = size)
+        ax[i].plot(x[i], y[i], label =  "Probability " +sy, lw = 2)
+        ax[i].set_xlabel(name,fontsize = size)
         if i==0:
-            ax[i].set_ylabel(sym,fontsize = size)
+            ax[i].set_ylabel(sy,fontsize = size)
            
         ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
                       label = r"25\% = " + str(round_sig(marginal_com[i].p_25, sf)) + " AU")
@@ -216,4 +215,27 @@ def mplot_com(marginal_com, obs, sys):
     fig.tight_layout()
     plt.savefig("images/com/"+sys+".pdf")
     #plt.show()
+
+#---------------------
+#maginals_Ms is the list of marginals of Mt, Mjup and Mr
+def mplot_Mass(marginal_Ms, obs, sys):
+    name, sy = [names[3], names[4], names[5]], [sym[3], sym[4], sym[5]]
+    size, sf  = 15, 2
+
+    x, y = [], []
+    
+    for j in range(len(marginal_Ms)):
+        x.append([marginal_Ms[j][i].space[-1] for i in range(len(marginal_Ms[j]))])
+        y.append([marginal_Ms[j][i].marginal/marginal_Ms[j][i].marginal.max() for i in range(len(marginal_Ms[j]))])
+
+    #Figure:
+    fig, ax = plt.subplots(3, 3, sharey='row', figsize=(15,5))
+
+    for k in range(0,3):
+        for m in range(0,3):
+            ax[k,m].plot(x[k][m],y[k][m])
+
+
+    plt.show()
+
 

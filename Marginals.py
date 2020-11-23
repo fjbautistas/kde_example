@@ -52,8 +52,8 @@ def Mar_vars(sistemas):
             marginals.append(M)
 
         #-----plots----
-        mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
-        mplot_com(marginals[2], systm.com.values[0], sistemas[k])
+        #mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
+        #mplot_com(marginals[2], systm.com.values[0], sistemas[k])
     return marginals
 
 
