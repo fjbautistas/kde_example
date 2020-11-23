@@ -104,11 +104,10 @@ class Marginal():
     def __init__(self, like, prior, *args):
                 
         self.like = like; self.prior= prior 
-        self.space = [np.linspace(args[i].min(),args[i].max(), 
-                                  150) for i in range(len(args))]
+        self.space = [np.linspace(args[i].min(),args[i].max(),150) for i in range(len(args))]
     
         self.data = np.vstack([*args]).T
-        self.data_std = (self.data-np.mean(self.data, axis=0))/np.std(self.data, axis=0) # standarization
+        self.data_std = (self.data-np.mean(self.data, axis=0))/np.std(self.data, axis=0)#std
         
         self.diff  = [np.abs(self.data_std[:,i][1]-self.data_std[:,i][0]) for i in range(len(self.data_std[0]))] 
         self.dz = np.abs(self.space[-1][1]-self.space[-1][0])
@@ -140,7 +139,7 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
     size = 15
     m = [marginal_md, marginal_tau]
-    x = [marginal_md.space[2], marginal_tau.space[2]]
+    x = [marginal_md.space[-1], marginal_tau.space[-1]]
     y = [marginal_md.marginal/marginal_md.marginal.max(),
          marginal_tau.marginal/marginal_tau.marginal.max()]
     #Figure:
@@ -152,11 +151,11 @@ def mplot_2v(marginal_md, marginal_tau, sys):
         ax[i].tick_params(axis='both', labelsize=size-2)
         if i == 0:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + "%.2f"%m[i].p_25)
+                          label = r"25\% = " + "%.3g"%m[i].p_25)
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
-                          label = r"50\% = " + "%.2f"%m[i].p_50)
+                          label = r"50\% = " + "%.3g"%m[i].p_50)
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
-                          label = r"75\% = " + "%.2f"%m[i].p_75)
+                          label = r"75\% = " + "%.3g"%m[i].p_75)
         if i == 1:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
                           label = r"25\% = " + "{:.2e}".format(m[i].p_25))
@@ -172,3 +171,43 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     fig.tight_layout()
     plt.savefig("images/md_tau/"+sys+".pdf")
     plt.show()
+
+#------------------    
+
+def mplot_com(marginal_com, obs, sys):
+    names, sym = r"Center of mass $r_\text{cm}$ (AU)", r"$p\left(r_\text{cm}\right)$"
+    titles = ["No perturbations","Low perturbations","High perturbations"]
+    size = 15
+
+    x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
+    y = [marginal_com[i].marginal/marginal_com[i].marginal.max()
+         for i in range(len(marginal_com))]
+    
+    #Figure:
+    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(15,5))
+
+    for i in range(0,3):
+        ax[i].plot(x[i], y[i], label = sym, lw = 2)
+        ax[i].set_xlabel(names,fontsize = size)
+        if i==0:
+            ax[i].set_ylabel(sym,fontsize = size)
+           
+        ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
+                      label = r"25\% = " + "%.3g"%marginal_com[i].p_25)
+        ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2",
+                      label = r"50\% = " + "%.3g"%marginal_com[i].p_50)
+        ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3",
+                      label = r"75\% = " + "%.3g"%marginal_com[i].p_75)
+
+        ax[i].axvline(x = obs, ls='--', c="k",
+                      label = r"observed = " + "%.3g"%obs[0])
+
+        ax[i].tick_params(axis='both', labelsize=size-2)
+        ax[i].set_title(titles[i], fontsize = size-1)
+        ax[i].legend(fontsize=size-1)
+    
+    plt.subplots_adjust(hspace=-.5)
+    fig.tight_layout()
+    plt.savefig("images/com/"+sys+".pdf")
+    plt.show()
+

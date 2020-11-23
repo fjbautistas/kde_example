@@ -23,7 +23,42 @@ s= ["Kepler-289",  "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11",
     "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
 
 # sisyemas is the above list s, you can change the systems if you want. 
-def mar_md_tau(sistemas):
+#----- ms and tau -----
+def md_tau(sistemas):
+
+    for k in range(len(sistemas)):
+        systm = obs_data[obs_data.sys_name == sistemas[k]] 
+        print(sistemas[k])
+        #-------- prior ------
+        prior_sys = []
+        for i in range(len(data)):
+    
+            p = prior([data[i]["ms"],data[i]["metal"]],
+                      [[systm.ms, systm.dms],
+                       [systm.metal,systm.dmetal]])
+            p.prior_pdf()
+            prior_sys.append(p.pdf_prior)
+    
+        #-----likelihoods----
+        marginals = []
+        for n, var in enumerate(likelihoods):
+            M = []
+            for j in range(len(data)):
+                marginal = Marginal(var[j],prior_sys[j],
+                                    data[j]["ms"],data[j]["metal"],
+                                    data[j][variables[n]])
+                marginal.pdf()
+                M.append(marginal)
+
+            marginals.append(M)
+
+        #-----plots----
+        mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
+        mplot_com(marginals[2], systm.com.values, sistemas[k])
+    return marginals
+#---Other variables -----
+'''
+def vars(sistemas):
 
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]] 
@@ -50,17 +85,7 @@ def mar_md_tau(sistemas):
                 M.append(marginal)
 
             marginals.append(M)
-
-        #-----plots----
-        mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
-
-    #return marginals
-#================================ marginal plots ===============================
-
-#for j in range(len(s)):
-#    mplot_2v(marginals[i][0],marginals[i][0], s[j])
-    
-
+'''
 
 
     
