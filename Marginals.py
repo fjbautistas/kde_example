@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from files_to_marginals import *
+from Methods import *
 import matplotlib as mpl
 from scipy import stats
 import warnings; warnings.simplefilter('ignore')
