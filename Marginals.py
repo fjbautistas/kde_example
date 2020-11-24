@@ -1,9 +1,7 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 from Methods import *
-import matplotlib as mpl
-from scipy import stats
+from plots import * 
 import warnings; warnings.simplefilter('ignore')
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
@@ -54,10 +52,10 @@ def Mar_vars(sistemas):
             marginals.append(M)
 
         #-----plots----
-        #mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
+        mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
         #mplot_com(marginals[2], systm.com.values[0], sistemas[k])
-        mplot_Mass([marginals[3], marginals[4], marginals[5]],
-                   systm.Mtp.values[0]*sun_mass,sistemas[k])
+        #mplot_Mass([marginals[3], marginals[4], marginals[5]],
+        #           systm.Mtp.values[0]*sun_mass,sistemas[k])
     return marginals
 
 
