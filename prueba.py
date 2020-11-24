@@ -4,7 +4,7 @@ from Methods import *
 #from Likelihoods import *
 import matplotlib.pyplot as plt 
 
-dim = 150
+dim = 200
 #------data
 obs_data = pd.read_csv('data/observations.csv',index_col=None); 
 dn = pd.read_csv('data/no_p.csv',index_col=None)
@@ -24,9 +24,17 @@ mar.pdf()
 print(mar.p_25,mar.p_50,mar.p_75)
 
 #------plot
-plt.plot(mar.z, mar.marginal/mar.marginal.max())
+plt.step(mar.z, mar.marginal/mar.marginal.max())
 plt.plot(mar.z, np.cumsum(mar.marginal)*mar.dz)
-plt.axvline(mar.z[1]/2, ls = "--"); plt.axvline(mar.p_50, ls = "--"); plt.axvline(mar.p_75, ls = "--")
+
+if np.argmin((mar.inte-0.25)**2) != np.argmin((mar.inte-0.3)**2):
+
+    plt.axvline(((mar.z[np.argmin((mar.inte-0.3)**2)]-mar.z[np.argmin((mar.inte-0.25)**2)])/2)+mar.z[np.argmin((mar.inte-0.25)**2)],
+                ls = "--");
+else: 
+    plt.axvline(mar.p_25, ls = "--");
+#plt.axvline(((mar.z[6]-mar.z[5])/2)+mar.z[5],
+#            ls = "--")
 plt.axhline(.25, ls = ":"); plt.axhline(.50, ls = ":"); plt.axhline(.75, ls = ":")
 
 plt.axvspan(mar.z[0], mar.z[1], color='y', alpha=0.5, lw=0)
