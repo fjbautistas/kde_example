@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick
 import matplotlib as mpl
 from scipy import stats
 import warnings; warnings.simplefilter('ignore')
@@ -49,7 +50,7 @@ names = [r"Mass of Disk $M_d$ [$M_\odot$]",
          r"Dissipation time $\tau_g$ [y]",
          r"Center of mass $r_{\text{cm}}$ [AU]",
          r"Total planetary mass $M_{tp}$ [$M_\odot$]",
-         r"Gian planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
+         r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
          r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]",
          r"Number of total planets $N_{t}$",
          r"Number of giants $N_{\jupiter}$",
@@ -64,6 +65,8 @@ sym   = [r"$p\left(M_d\right)$",
          r"$p\left(N_{t}\right)$",
          r"$p\left(N_{\jupiter}\right)$",
          r"$p\left(N_{\oplus}\right)$"]
+
+unities = [r"$M_\odot$", r"y", r"AU", r"$M_\odot$", r"$M_\text{jup}$", r"$M_{\oplus}$"]
 
 titles = ["No perturbations","Low perturbations","High perturbations"]
 
@@ -170,7 +173,7 @@ def mplot_2v(marginal_md, marginal_tau, sys):
                           label = r"50\% = " + "{:.1e}".format(m[i].p_50) + " y")
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
                           label = r"75\% = " + "{:.1e}".format(m[i].p_75) + " y")
-            plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0))
+            plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0), useMathText=True)
 
         ax[i].legend(fontsize=size-1)
     
@@ -220,22 +223,65 @@ def mplot_com(marginal_com, obs, sys):
 #maginals_Ms is the list of marginals of Mt, Mjup and Mr
 def mplot_Mass(marginal_Ms, obs, sys):
     name, sy = [names[3], names[4], names[5]], [sym[3], sym[4], sym[5]]
-    size, sf  = 15, 2
+    size, sf  = 15, 3
 
-    x, y = [], []
+    x, y, z = [], [], []
     
     for j in range(len(marginal_Ms)):
         x.append([marginal_Ms[j][i].space[-1] for i in range(len(marginal_Ms[j]))])
         y.append([marginal_Ms[j][i].marginal/marginal_Ms[j][i].marginal.max() for i in range(len(marginal_Ms[j]))])
-
+        z.append([np.cumsum(marginal_Ms[j][i].marginal)*marginal_Ms[j][i].dz for i in range(len(marginal_Ms[j]))])
+        
     #Figure:
-    fig, ax = plt.subplots(3, 3, sharey='row', figsize=(15,5))
-
+    fig, ax = plt.subplots(3, 3, sharey='row', figsize=(15,10))
+    mins, maxs = [0,0,0], [0.003,1.1,800]
+    
     for k in range(0,3):
+        print(name[k])
         for m in range(0,3):
-            ax[k,m].plot(x[k][m],y[k][m])
+            ax[k,m].set_xlim(mins[k],maxs[k])
+            ax[k,m].plot(x[k][m],y[k][m], label="Probability " + sym[3+k])
+            ax[k,m].set_xlabel(names[k+3], fontsize = size)
+            ax[k,m].tick_params(axis='both', labelsize=size-2)
+            ax[k,m].plot(x[k][m],z[k][m])
+            ax[k,m].axhline(0.25, ls=":")
+            ax[k,m].axhline(0.5, ls=":")
+            ax[k,m].axhline(0.75, ls=":")
+            
+            if k==0:
+                ax[k,m].axvline(marginal_Ms[k][m].p_50,ls='--', c="C2",
+                            label = r"50\% = " + "{:.2e}".format(marginal_Ms[k][m].p_50)+" "+unities[3+k])
+                ax[k,m].axvline(marginal_Ms[k][m].p_75,ls='--', c="C3",
+                            label = r"75\% = " + "{:.2e}".format(marginal_Ms[k][m].p_75)+" "+unities[3+k])
+                ax[k,m].ticklabel_format(axis="x", style="sci", scilimits=(0,0))
+                ax[k,m].set_title(titles[m], fontsize = size-1)
+                ax[k,0].set_ylabel(sym[3+k],fontsize = size)
+                ax[k,m].axvline(x = obs, ls='--', c="k",
+                                label = r"observed = " + "{:.2e}".format(obs)+" "+unities[3+k])
+                ax[k,m].legend(fontsize=size-1)
+                
+            elif k == 2:
+                ax[k,m].axvline(marginal_Ms[k][m].p_25, ls='--', c="C1",
+                                label = r"25\% = " + str(round_sig(marginal_Ms[k][m].p_25, sf))+" "+unities[3+k])
+                ax[k,m].axvline(marginal_Ms[k][m].p_50,ls='--', c="C2",
+                                label = r"50\% = " + str(round_sig(marginal_Ms[k][m].p_50, sf))+" "+unities[3+k])
+                ax[k,m].axvline(marginal_Ms[k][m].p_75,ls='--', c="C3",
+                                label = r"75\% = " + str(round_sig(marginal_Ms[k][m].p_75, sf))+" "+unities[3+k])
+                ax[k,m].legend(fontsize=size-1)
 
-
+            else:
+                ax[k,m].axvline(marginal_Ms[k][m].p_50,ls='--', c="C2",
+                                label = r"50\% = " + str(round_sig(marginal_Ms[k][m].p_50, sf))+" "+unities[3+k])
+                ax[k,m].axvline(marginal_Ms[k][m].p_75,ls='--', c="C3",
+                                label = r"75\% = " + str(round_sig(marginal_Ms[k][m].p_75, sf))+" "+unities[3+k])
+                ax[k,m].legend(fontsize=size-1)
+                
+            ax[1,0].set_ylabel(sym[4],fontsize = size)
+            ax[2,0].set_ylabel(sym[5],fontsize = size)
+       
+    plt.subplots_adjust(hspace=0.288, wspace=0.165)
+    fig.tight_layout()
+    #plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
 
 

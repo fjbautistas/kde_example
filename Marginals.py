@@ -21,6 +21,8 @@ variables   = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi","npt"]
 s= ["Kepler-289",  "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11",
     "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
 
+sun_mass = 0.000954588
+
 # sisyemas is the above list s, you can change the systems if you want. 
 #----- ms and tau -----
 def Mar_vars(sistemas):
@@ -54,6 +56,8 @@ def Mar_vars(sistemas):
         #-----plots----
         #mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
         #mplot_com(marginals[2], systm.com.values[0], sistemas[k])
+        mplot_Mass([marginals[3], marginals[4], marginals[5]],
+                   systm.Mtp.values[0]*sun_mass,sistemas[k])
     return marginals
 
 
