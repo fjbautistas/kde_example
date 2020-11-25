@@ -46,20 +46,26 @@ titles = ["No perturbations","Low perturbations","High perturbations"]
 #radial velocity: WASP-47, GJ 876 
 s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
 
-priors = []
-systm = obs_data[obs_data.sys_name == s[0]] 
+
 #-------- prior ------
-prior_sys = []
-for i in range(0,3):
-    p = prior([data[i].ms, data[i].metal],
-              [[systm.ms, systm.dms],
-               [systm.metal,systm.dmetal]])
-    p.prior_pdf()
-    prior_sys.append(p.pdf_prior)
-priors.append(prior_sys)
+def predict(sistemas):
+    priors = []
+
+    for k in range(len(sistemas)):
+        systm = obs_data[obs_data.sys_name == sistemas[k]] 
+        print(systm.sys_name)
+
+        prior_sys = []
+        for i in range(0,3):
+            p = prior([data[i].ms, data[i].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+            p.prior_pdf()
+            prior_sys.append(p.pdf_prior)
+        priors.append(prior_sys)
+
+    return priors
 
 #======================================================================== Marginals ============================================================================================
-
+'''
 marginales = [] 
 for n, var in enumerate(likelihoods):
     M = []
@@ -68,7 +74,7 @@ for n, var in enumerate(likelihoods):
         marginal.pdf()
         M.append(marginal)
     marginales.append(M)
-'''
+
 #marginals.append(M)
 
         #-----plots----
