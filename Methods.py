@@ -120,7 +120,7 @@ class Marginal():
         self.z_std  = ((self.marginal)*((self.z-self.z_mean)**2)*self.dz).sum()**(1/2.)
 
         #percentage:
-        if np.argmin((self.inte-0.25)**2) == 0 or 
+        #if np.argmin((self.inte-0.25)**2) == 0 or 
         
         self.p_25 = self.z[np.argmin((self.inte-0.25)**2)]
         self.p_50 = self.z[np.argmin((self.inte-0.50)**2)]

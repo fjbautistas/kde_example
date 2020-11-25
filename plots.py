@@ -6,66 +6,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import matplotlib as mpl
-from Mthods import *
+from Methods import *
 import warnings; warnings.simplefilter('ignore')
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
-
-#========================================== data ==========================================
-dim = 150
-# observational data:
-obs_data = pd.read_csv('data/observations.csv',index_col=None); 
-# Simulated data:
-dn = pd.read_csv('data/no_p.csv',index_col=None)
-dl = pd.read_csv('data/low_p.csv',index_col=None)
-dh = pd.read_csv('data/high_p.csv',index_col=None)
-# likelihoods pdfs n,l,h per column
-Md  = pd.read_csv('data/likelihoods/like_md.csv',index_col=None)
-tau = pd.read_csv('data/likelihoods/like_tgas.csv',index_col=None)
-com = pd.read_csv('data/likelihoods/like_com.csv',index_col=None)
-mtp = pd.read_csv('data/likelihoods/like_Mtp.csv',index_col=None)
-mjup= pd.read_csv('data/likelihoods/like_Mjup.csv',index_col=None)
-mrock = pd.read_csv('data/likelihoods/like_Mrock.csv',index_col=None)
-ngi = pd.read_csv('data/likelihoods/like_ngi.csv',index_col=None)
-ntp = pd.read_csv('data/likelihoods/like_ntp.csv',index_col=None)
-nplanets = pd.read_csv('data/likelihoods/like_nplanets.csv',index_col=None)
-#===================================== likelihoods ========================================
-like_Md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_mjup = [mjup[str(mjup.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_mrock = [mrock[str(mrock.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,
-                                                                   dim) for i in range(1,4)]
-like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_ntp = [ntp[str(ntp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,
-                                                                   dim) for i in range(1,4)]
-#======================================= names ===========================================
-names = [r"Mass of Disk $M_d$ [$M_\odot$]",
-         r"Dissipation time $\tau_g$ [y]",
-         r"Center of mass $r_{\text{cm}}$ [AU]",
-         r"Total planetary mass $M_{tp}$ [$M_\odot$]",
-         r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
-         r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]",
-         r"Number of total planets $N_{t}$",
-         r"Number of giants $N_{\jupiter}$",
-         r"Number of giants $N_{t}$"]
-
-sym   = [r"$p\left(M_d\right)$",
-         r"$p\left(\tau_g\right)$",
-         r"$p\left(r_\text{cm}\right)$",
-         r"$p\left(M_{tp}\right)$",
-         r"$p\left(M_{\jupiter}\right)$",
-         r"$p\left(M_{r}\right)$",
-         r"$p\left(N_{t}\right)$",
-         r"$p\left(N_{\jupiter}\right)$",
-         r"$p\left(N_{\oplus}\right)$"]
-
-unities = [r"$M_\odot$", r"y", r"AU", r"$M_\odot$", r"$M_\text{jup}$", r"$M_{\oplus}$"]
-
-titles = ["No perturbations","Low perturbations","High perturbations"]
 
 #======================================= Methods ===========================================
 #--------significant figures
@@ -159,6 +103,7 @@ def mplot_com(marginal_com, obs, sys):
 
 #---------------------
 #maginals_Ms is the list of marginals of Mt, Mjup and Mr
+'''
 def mplot_Mass(marginal_Ms, obs, sys):
     name, sy = [names[3], names[4], names[5]], [sym[3], sym[4], sym[5]]
     size, sf  = 15, 3
@@ -185,7 +130,7 @@ def mplot_Mass(marginal_Ms, obs, sys):
             ax[k,m].axhline(0.25, ls=":")
             ax[k,m].axhline(0.5, ls=":")
             ax[k,m].axhline(0.75, ls=":")
-            '''
+            
             if k==0:
                 ax[k,m].axvline(marginal_Ms[k][m].p_50,ls='--', c="C2",
                             label = r"50\% = " + "{:.2e}".format(marginal_Ms[k][m].p_50)+" "+unities[3+k])
@@ -213,7 +158,7 @@ def mplot_Mass(marginal_Ms, obs, sys):
                 ax[k,m].axvline(marginal_Ms[k][m].p_75,ls='--', c="C3",
                                 label = r"75\% = " + str(round_sig(marginal_Ms[k][m].p_75, sf))+" "+unities[3+k])
                 ax[k,m].legend(fontsize=size-1)
-            '''    
+            
             ax[1,0].set_ylabel(sym[4],fontsize = size)
             ax[2,0].set_ylabel(sym[5],fontsize = size)
        
@@ -221,7 +166,7 @@ def mplot_Mass(marginal_Ms, obs, sys):
     fig.tight_layout()
     #plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
-
+'''
 
 
 

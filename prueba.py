@@ -27,7 +27,7 @@ print(mar.p_25,mar.p_50,mar.p_75)
 plt.step(mar.z, mar.marginal/mar.marginal.max())
 plt.plot(mar.z, np.cumsum(mar.marginal)*mar.dz)
 
-if np.argmin((mar.inte-0.25)**2) != np.argmin((mar.inte-0.3)**2):
+if np.argmin((mar.inte-0.25)**2) == 0 or np.argmin((mar.inte-0.325)**2) == 1: 
 
     plt.axvline(((mar.z[np.argmin((mar.inte-0.3)**2)]-mar.z[np.argmin((mar.inte-0.25)**2)])/2)+mar.z[np.argmin((mar.inte-0.25)**2)],
                 ls = "--");
