@@ -41,16 +41,15 @@ unities = [r"$M_\odot$", r"y", r"AU", r"$M_\odot$", r"$M_\text{jup}$", r"$M_{\op
 
 titles = ["No perturbations","Low perturbations","High perturbations"]
 
-#========================================================================== Priors ============================================================================================
 #Primary transit: Kepler-289, TRAPPIST-1, K2-3, K2-138, TOI-125
 #radial velocity: WASP-47, GJ 876 
 s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
 
-
-#-------- prior ------
-def predict(sistemas):
+#========================================================================== Priors ============================================================================================
+# sitemas is a list sublist of s or the complete list 
+def priors(sistemas, data = data):
+    #-------- prior ------
     priors = []
-
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]] 
         print(systm.sys_name)
@@ -65,17 +64,31 @@ def predict(sistemas):
     return priors
 
 #======================================================================== Marginals ============================================================================================
-'''
-marginales = [] 
-for n, var in enumerate(likelihoods):
-    M = []
-    for i in range(0,3):
-        marginal = Marginal(var[i], priors[0][i], data[i].ms, data[i].metal, data[i].iloc[:,[n]])
-        marginal.pdf()
-        M.append(marginal)
-    marginales.append(M)
+def predict(sistemas, likelihoods = likelihoods):
+    p = priors(sistemas)
+    marginales = []
+    
+    for j in range(len(p)):
+        mar_var = []
+        for n, var in enumerate(likelihoods):
+            M=[]
+            for m in range(0,3):
+                m = Marginal()
+                m.pdf()
+                M.append(m)
 
-#marginals.append(M)
+
+
+            
+    #    M = []
+    #    for i in range(0,3):
+    #        marginal = Marginal(var[i], priors[0][i], data[i].ms, data[i].metal, data[i].iloc[:,[n]])
+    #        marginal.pdf()
+    #        M.append(marginal)
+    #    marginales.append(M)
+
+'''
+        #marginals.append(M)
 
         #-----plots----
         #mplot_2v(marginals[0][0],marginals[1][0], sistemas[k])
