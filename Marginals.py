@@ -3,8 +3,6 @@ import pandas as pd
 from Methods import prior, Marginal
 #from plots import * 
 import warnings; warnings.simplefilter('ignore')
-#mpl.rcParams['text.usetex'] = True
-#mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
 
 #================================================================= important data =============================================================================================
 # observational data:
@@ -29,6 +27,7 @@ nplanets = pd.read_csv('data/likelihoods/like_nplanets.csv',index_col=None); lik
 
 likelihoods = [like_md, like_tau, like_com, like_mtp, like_mjup, like_mrock, like_nplanets, like_ngi, like_ntp]
 
+variables = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi", "npt"]
 #========================================================== names, variables and unities ======================================================================================
 names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]", r"Center of mass $r_{\text{cm}}$ [AU]", r"Total planetary mass $M_{tp}$ [$M_\odot$]",
          r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
@@ -47,13 +46,12 @@ s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-4
 
 #========================================================================== Priors ============================================================================================
 # sitemas is a list sublist of s or the complete list 
-def priors(sistemas, data = data):
+def priors(sistemas, data = data, obs_data =obs_data):
     #-------- prior ------
     priors = []
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]] 
         print(systm.sys_name)
-
         prior_sys = []
         for i in range(0,3):
             p = prior([data[i].ms, data[i].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
@@ -69,13 +67,25 @@ def predict(sistemas, likelihoods = likelihoods):
     marginales = []
     
     for j in range(len(p)):
-        mar_var = []
-        for n, var in enumerate(likelihoods):
+        print(j)
+        for m in range(0,3):
             M=[]
-            for m in range(0,3):
-                m = Marginal()
-                m.pdf()
-                M.append(m)
+            print(m)
+            for n in range(0,9):
+                mar = Marginal(likelihoods[n][m], p[j][m], data[m].ms,
+                               data[m].metal, data[m][variables[n]])
+                mar.pdf()
+                M.append(mar)
+        marginales.append(M)
+
+    return marginales
+    
+
+            #M = []
+            #for n, var in enumerate(likelihoods):
+            #    m = Marginal(var,)
+            #    m.pdf()
+            #    M.append(m)
 
 
 

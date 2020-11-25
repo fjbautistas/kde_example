@@ -20,8 +20,8 @@ def round_sig(x, sig=2):
 #======================================== plots ============================================
 #-------- For plots -------
 def mplot_2v(marginal_md, marginal_tau, sys):
-    name = [names[0], names[1]]
-    sy   = [sym[0], sym[1]] 
+    name = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]"]
+    sy   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
     size, sf  = 15, 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
@@ -59,12 +59,13 @@ def mplot_2v(marginal_md, marginal_tau, sys):
     
     plt.subplots_adjust(hspace=1.5)
     fig.tight_layout()
-    plt.savefig("images/md_tau/"+sys+".pdf")
-    #plt.show()
+    #plt.savefig("images/md_tau/"+sys+".pdf")
+    plt.show()
 
 #------------------    
 def mplot_com(marginal_com, obs, sys):
-    name, sy = names[2], sym[2]
+    name = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]"],
+    sy   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"]
     size, sf = 15, 2
 
     x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
