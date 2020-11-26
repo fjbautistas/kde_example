@@ -13,7 +13,7 @@ import warnings; warnings.simplefilter('ignore')
 class optimal_pdf(object):
 
     def __init__(self, *args):
-        self.lenght = 200
+        self.lenght = 300
         self.dim  = len(args)
         self.data = np.vstack([*args]).T
         self.data_std = (self.data-np.mean(self.data, axis=0))/np.std(self.data, axis=0) # standarization
@@ -59,7 +59,7 @@ class optimal_pdf(object):
 class prior():
     
     def __init__(self, varbs, *args):
-        self.lenght = 200
+        self.lenght = 300
         self.org_data = np.array(args)
         self.pdfs = []         
     
@@ -91,7 +91,7 @@ class prior():
 class Marginal():
     
     def __init__(self, like, prior, *args):
-        self.lenght = 200     
+        self.lenght = 300     
         self.like = like; self.prior= prior 
         self.space = [np.linspace(args[i].min(),args[i].max(),
                                   self.lenght) for i in range(len(args))]
@@ -119,9 +119,7 @@ class Marginal():
         self.z_mean = (self.marginal*self.z*self.dz).sum()
         self.z_std  = ((self.marginal)*((self.z-self.z_mean)**2)*self.dz).sum()**(1/2.)
 
-        #percentage:
-        #if np.argmin((self.inte-0.25)**2) == 0 or 
-        
+        #percentage:        
         self.p_25 = self.z[np.argmin((self.inte-0.25)**2)]
         self.p_50 = self.z[np.argmin((self.inte-0.50)**2)]
         self.p_75 = self.z[np.argmin((self.inte-0.75)**2)]
