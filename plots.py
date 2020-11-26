@@ -19,47 +19,43 @@ def round_sig(x, sig=2):
 
 #======================================== plots ============================================
 #-------- For plots -------
-def mplot_2v(marginal_md, marginal_tau, sys):
-    name = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]"]
-    sy   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"] 
+def mplot_md_tau(marginal_md, marginal_tau, sys, name, sy, unities):
     size, sf  = 15, 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
     y = [marginal_md.marginal/marginal_md.marginal.max(),
          marginal_tau.marginal/marginal_tau.marginal.max()]
-    z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,
-         np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
-
-    #Figure:
+    #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,
+    #     np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
     fig, ax = plt.subplots(1,2, figsize=(12,5))
     for i in range(0,2):
         ax[i].plot(x[i], y[i], label = "Probability " + sy[i], lw = 2)
-        ax[i].plot(x[i], z[i], label = "Acumulative " + sy[i], lw = 2)
-        ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
+        #ax[i].plot(x[i], z[i], label = "Acumulative " + sy[i], lw = 2)
+        #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
         ax[i].set_xlabel(name[i],fontsize = size)
         ax[i].set_ylabel(sy[i],fontsize = size)
         ax[i].tick_params(axis='both', labelsize=size-2)
         if i == 0:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + str(round_sig(m[i].p_25, sf)) + r' $M_\odot$')
+                          label = r"25\% = " + str(round_sig(m[i].p_25, sf)) +" "+unities[i])
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
-                          label = r"50\% = " + str(round_sig(m[i].p_50, sf)) + r' $M_\odot$')
+                          label = r"50\% = " + str(round_sig(m[i].p_50, sf)) +" "+unities[i])
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
-                          label = r"75\% = " + str(round_sig(m[i].p_75, sf)) + r' $M_\odot$')
+                          label = r"75\% = " + str(round_sig(m[i].p_75, sf)) +" "+ unities[i])
         if i == 1:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + "{:.1e}".format(m[i].p_25) + " y")
+                          label = r"25\% = " + "{:.1e}".format(m[i].p_25) +" "+ unities[i])
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
-                          label = r"50\% = " + "{:.1e}".format(m[i].p_50) + " y")
+                          label = r"50\% = " + "{:.1e}".format(m[i].p_50) +" "+unities[i])
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
-                          label = r"75\% = " + "{:.1e}".format(m[i].p_75) + " y")
+                          label = r"75\% = " + "{:.1e}".format(m[i].p_75) +" "+ unities[i])
             plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0), useMathText=True)
 
         ax[i].legend(fontsize=size-1)
     
     plt.subplots_adjust(hspace=1.5)
     fig.tight_layout()
-    #plt.savefig("images/md_tau/"+sys+".pdf")
+    plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
 #------------------    

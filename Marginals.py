@@ -67,7 +67,8 @@ def predict_md_tau(sistemas, likelihoods):
                 Marginls.append(Ma)
            # Marg.append(Mar)
         #Marginls.append(Marg)
-    return  Marginls
+    mplot_md_tau(Marginls[0], Marginls[3], sistemas[0],
+                 [names[0], names[1]], [sym[0],sym[1]], [unities[0], unities[1]])
 
 #likelihoods = [like_md, like_tau, like_com, like_mtp, like_mjup, like_mrock, like_nplanets, like_ngi, like_ntp]
 
@@ -77,7 +78,7 @@ def predict_md_tau(sistemas, likelihoods):
 Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
 like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
 tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
-like_tau = [tau[str(tau.columns[0])].values.reshape(dim,dim,dim) for i in range(1,4)]
+like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 l_md_tau = [like_md, like_tau]
 
 #mar_mdtau = predict([s[0]])
