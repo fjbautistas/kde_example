@@ -55,13 +55,11 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, name, sy, unities):
     
     plt.subplots_adjust(hspace=1.5)
     fig.tight_layout()
-    plt.savefig("images/md_tau/"+sys+"md.pdf")
+    #plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
 #------------------    
 def mplot_com(marginal_com, obs, sys):
-    name = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]"],
-    sy   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$"]
     size, sf = 15, 2
 
     x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
