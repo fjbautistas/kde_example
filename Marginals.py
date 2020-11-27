@@ -17,22 +17,6 @@ dim = 300
 #========================================================== names, variables and unities ======================================================================================
 variables = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi", "npt"]
 
-names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
-         r"Center of mass $r_{\text{cm}}$ [AU]",
-         r"Total planetary mass $M_{tp}$ [$M_\odot$]",
-         r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
-         r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
-         r"Number of giants $N_{\jupiter}$", r"Number of giants $N_{t}$"]
-
-sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_\text{cm}\right)$",
-         r"$p\left(M_{tp}\right)$", r"$p\left(M_{\jupiter}\right)$",
-         r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
-         r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
-
-unities = [r"$M_\odot$", r"y", r"AU", r"$M_\odot$", r"$M_\text{jup}$", r"$M_{\oplus}$"]
-
-titles = ["No perturbations","Low perturbations","High perturbations"]
-
 #Primary transit: Kepler-289, TRAPPIST-1, K2-3, K2-138, TOI-125
 #radial velocity: WASP-47, GJ 876 
 s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
@@ -56,19 +40,21 @@ def priors(sistemas, data = data, obs_data = obs_data):
 
 #======================================================================== Marginals ============================================================================================
 def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
-    Marginls, priors = [], []
-    for m in range(0,3):
-              p = prior([data[m].ms, data[m].metal],
-                        [[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
-              p.prior_pdf()
-              for n in range(len(likelihoods)):
-                  Marg = Marginal(likelihoods[n][m], p.pdf_prior,
-                                  data[m].ms,data[m].metal, data[m][variables[n]])
-                  Marg.pdf()
-                  Marginls.append(Marg)
+    Marginls = []
+    for k in range(len(sistemas)):
+        systm = obs_data[obs_data.sys_name == sistemas[k]]
+        for m in range(0,3):
+            p = prior([data[m].ms, data[m].metal],
+                      [[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+            p.prior_pdf()
+            for n in range(len(likelihoods)):
+                Marg = Marginal(likelihoods[n][m], p.pdf_prior,
+                                data[m].ms,data[m].metal, data[m][variables[n]])
+                Marg.pdf()
+                Marginls.append(Marg)
            # Marg.append(Mar)
         #Marginls.append(Marg)
-    return Marginals
+    return Marginls
     #mplot_md_tau(Marginls[0], Marginls[3], sistemas[0],
     #             [names[0], names[1]], [sym[0],sym[1]], [unities[0], unities[1]])
 

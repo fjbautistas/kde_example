@@ -10,7 +10,25 @@ from Methods import *
 import warnings; warnings.simplefilter('ignore')
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
+#plt.style.use('file:///usr/share/mygraph/mystyle.mplstyle')
+plt.style.use('./images/img.mplstyle')
 
+#================================== Names and symbols ======================================
+names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
+         r"Center of mass $r_{\text{cm}}$ [AU]",
+         r"Total planetary mass $M_{tp}$ [$M_\odot$]",
+         r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
+         r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
+         r"Number of giants $N_{\jupiter}$", r"Number of giants $N_{t}$"]
+
+sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_\text{cm}\right)$",
+         r"$p\left(M_{tp}\right)$", r"$p\left(M_{\jupiter}\right)$",
+         r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
+         r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
+
+unities = [r"$M_\odot$", r"y", r"AU", r"$M_\odot$", r"$M_\text{jup}$", r"$M_{\oplus}$"]
+
+titles = ["No perturbations","Low perturbations","High perturbations"]
 #======================================= Methods ===========================================
 #--------significant figures
 from math import log10, floor
@@ -20,24 +38,24 @@ def round_sig(x, sig=2):
 #======================================== plots ============================================
 #-------- For plots -------
 def mplot_md_tau(marginal_md, marginal_tau, sys, name, sy, unities):
-    size, sf  = 15, 2
+    sf= 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
     y = [marginal_md.marginal/marginal_md.marginal.max(),
          marginal_tau.marginal/marginal_tau.marginal.max()]
     #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,
     #     np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
-    fig, ax = plt.subplots(1,2, figsize=(12,5))
+    fig, ax = plt.subplots(1,2, figsize=(9,3))
     for i in range(0,2):
         ax[i].plot(x[i], y[i], label = "Probability " + sy[i], lw = 2)
         #ax[i].plot(x[i], z[i], label = "Acumulative " + sy[i], lw = 2)
-        #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
-        ax[i].set_xlabel(name[i],fontsize = size)
-        ax[i].set_ylabel(sy[i],fontsize = size)
-        ax[i].tick_params(axis='both', labelsize=size-2)
+        #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":")
+        ax[i].set_xlabel(name[i])
+        ax[i].set_ylabel(sy[i])
+        ax[i].tick_params(axis='both')
         if i == 0:
-            ax[i].axvline(x = m[i].p_25,ls='--', c="C1",
-                          label = r"25\% = " + str(round_sig(m[i].p_25, sf)) +" "+unities[i])
+            ax[i].axvline(x = m[i].p_25,ls='--', c="C1",label = r"25\% = "\
+                          + str(round_sig(m[i].p_25, sf)) +" "+unities[i])
             ax[i].axvline(x = m[i].p_50,ls='--', c="C2",
                           label = r"50\% = " + str(round_sig(m[i].p_50, sf)) +" "+unities[i])
             ax[i].axvline(x = m[i].p_75,ls='--', c="C3",
@@ -51,11 +69,11 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, name, sy, unities):
                           label = r"75\% = " + "{:.1e}".format(m[i].p_75) +" "+ unities[i])
             plt.ticklabel_format(axis="x", style="sci", scilimits=(0,0), useMathText=True)
 
-        ax[i].legend(fontsize=size-1)
+        ax[i].legend()
     
     plt.subplots_adjust(hspace=1.5)
     fig.tight_layout()
-    #plt.savefig("images/md_tau/"+sys+"md.pdf")
+    plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
 #------------------    
