@@ -68,7 +68,8 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, name=names, sy=sym, unities=uni
             plt.ticklabel_format(axis="x", style="sci", useOffset=False, 
                                  scilimits=(6,6), useMathText=True)
         ax[i].legend()
-    plt.anotate(sys, (.5,1.1))
+    fig.text(0.4, .99, sys)
+    fig.tight_layout(rect=[0, 0, 1, .95])
     plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
