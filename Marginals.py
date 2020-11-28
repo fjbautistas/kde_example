@@ -43,22 +43,18 @@ def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
     Marginls = []
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]]
+
         for m in range(0,3):
             p = prior([data[m].ms, data[m].metal],
                       [[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
             p.prior_pdf()
+
             for n in range(len(likelihoods)):
                 Marg = Marginal(likelihoods[n][m], p.pdf_prior,
                                 data[m].ms,data[m].metal, data[m][variables[n]])
-                Marg.pdf()
-                Marginls.append(Marg)
-           # Marg.append(Mar)
-        #Marginls.append(Marg)
-    return Marginls
-    #mplot_md_tau(Marginls[0], Marginls[3], sistemas[0],
-    #             [names[0], names[1]], [sym[0],sym[1]], [unities[0], unities[1]])
-
-#likelihoods = [like_md, like_tau, like_com, like_mtp, like_mjup, like_mrock, like_nplanets, like_ngi, like_ntp]
+                Marg.pdf(); Marginls.append(Marg)
+                
+    mplot_md_tau(Marginls[0], Marginls[3], sistemas[0])
 
 #======================================================================== Marginals ============================================================================================
 def predict_com(sistemas, likelihoods):
