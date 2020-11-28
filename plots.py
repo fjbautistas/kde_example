@@ -41,10 +41,8 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, name=names, sy=sym, unities=uni
     sf= 2
     m = [marginal_md, marginal_tau]
     x = [marginal_md.space[-1], marginal_tau.space[-1]]
-    y = [marginal_md.marginal/marginal_md.marginal.max(),
-         marginal_tau.marginal/marginal_tau.marginal.max()]
-    #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,
-    #     np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
+    y = [marginal_md.marginal/marginal_md.marginal.max(),marginal_tau.marginal/marginal_tau.marginal.max()]
+    #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
     fig, ax = plt.subplots(1, 2)
     for i in range(0,2):
         ax[i].plot(x[i], y[i], label = "Probability " + sy[i], lw=2)
@@ -69,8 +67,8 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, name=names, sy=sym, unities=uni
                           + "{:.1e}".format(m[i].p_75) +" "+ unities[i])
             plt.ticklabel_format(axis="x", style="sci", useOffset=False, 
                                  scilimits=(6,6), useMathText=True)
-            ax[i].locator_params(axis='x', nbins = 6)
         ax[i].legend()
+    plt.anotate(sys, (.5,1.1))
     plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
