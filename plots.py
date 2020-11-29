@@ -20,7 +20,7 @@ names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
          r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
          r"Number of giants $N_{\jupiter}$", r"Number of giants $N_{t}$"]
 
-sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{cm}\right)$",
+sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{cm}}\right)$",
          r"$p\left(M_{tp}\right)$", r"$p\left(M_{\jupiter}\right)$",
          r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
          r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
@@ -73,36 +73,36 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     plt.show()
 
 #------------------------------------- For plots ------------------------------------------- 
-def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[1], unities=unities):
+def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
     x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
     y = [marginal_com[i].marginal/marginal_com[i].marginal.max() for i in range(len(marginal_com))]
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
-    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(10.9, 3.9))
-
+    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(13.5, 3.9))
+    ax[0].set_ylabel(sy)
     for i in range(0,3):
         #ax[i].plot(x[i], z[i], label =  "Acumulative " +sy)
         #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
-        ax[i].plot(x[i], y[i], label = r"Probability "+sy, lw = 2)
-        ax[i].set_xlabel(name)
+        ax[i].plot(x[i], y[i], label = r"Probability "+sy)
+        ax[i].set_xlabel(name); 
            
         ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
-                      label = r"25\% = ") #+ str(round_sig(marginal_com[i].p_25, sf)) + " AU")
+                      label = r"25\% = " + str(round_sig(marginal_com[i].p_25, sf)) + " AU")
         ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2",
-                      label = r"50\% = ") #+ str(round_sig(marginal_com[i].p_50, sf)) + " AU" )
+                      label = r"50\% = " + str(round_sig(marginal_com[i].p_50, sf)) + " AU" )
         ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3",
-                      label = r"75\% = ") #+ str(round_sig(marginal_com[i].p_75, sf)) + " AU")
+                      label = r"75\% = " + str(round_sig(marginal_com[i].p_75, sf)) + " AU")
         ax[i].axvline(x = obs, ls='--', c="k",
-                      label = r"observed = " )#+ str(round_sig(obs, sf)) + " AU" )
+                      label = r"observed = "+ str(round_sig(obs, sf)) + " AU" )
 
-        #ax[i].tick_params(axis='both', labelsize=size-2)
+        ax[i].tick_params(axis='both')
         ax[i].set_title(titles[i])
         ax[i].legend()
     
     #plt.subplots_adjust(hspace=-.5)
     fig.tight_layout()
-    #plt.savefig("images/com/"+sys+".pdf")
+    plt.savefig("images/com/"+sys+".pdf")
     plt.show()
 
 #---------------------
