@@ -9,6 +9,9 @@ from sklearn.model_selection import GridSearchCV
 import warnings; warnings.simplefilter('ignore')
 
 #=================================== Likelihoods ==========================================
+def interpolate(percnt, x1, y1, x2, y2):
+    return y1+(((percent-x1)/(x2-x1))*(y2-y1))
+
 # args are a lsit of simulated data per colums dn.ms, dn,metal, dn.ngi ....
 class optimal_pdf(object):
 
@@ -119,7 +122,23 @@ class Marginal():
         self.z_mean = (self.marginal*self.z*self.dz).sum()
         self.z_std  = ((self.marginal)*((self.z-self.z_mean)**2)*self.dz).sum()**(1/2.)
 
-        #percentage:        
+        #percentage: It is necessary to interpolate:
+
+        p25_1 = np.argmin((self.inte-0.25)**2); p25_2 = np.argmax((self.inte-0.25)**2)
+        
+        if p25_1 > p25_2:
+             self.p_25 = interpolate(.25, x1, y1, x2, y2)
+
+        
+
+        
+        p50_1 = np.argmin((self.inte-0.50)**2); p50_2 = np.argmax((self.inte-0.50)**2)
+        p75_1 = np.argmin((self.inte-0.75)**2); p75_2 = np.argmax((self.inte-0.75)**2)
+
+        
+        percnt, x1, y1, x2, y
+
+        
         self.p_25 = self.z[np.argmin((self.inte-0.25)**2)]
         self.p_50 = self.z[np.argmin((self.inte-0.50)**2)]
         self.p_75 = self.z[np.argmin((self.inte-0.75)**2)]
