@@ -3,14 +3,16 @@
 #==========================================================================================
 import numpy as np
 import pandas as pd
-from scipy import stats
+from scipy import stats, interpolate
 from sklearn.neighbors import KernelDensity
 from sklearn.model_selection import GridSearchCV
 import warnings; warnings.simplefilter('ignore')
 
+
+
 #=================================== Likelihoods ==========================================
-def interpolate(percnt, x1, y1, x2, y2):
-    return y1+(((percent-x1)/(x2-x1))*(y2-y1))
+def interpol(percnt, x1, x2, y1, y2):
+    return y1+(((percnt-x1)/(x2-x1))*(y2-y1))
 
 # args are a lsit of simulated data per colums dn.ms, dn,metal, dn.ngi ....
 class optimal_pdf(object):
@@ -124,24 +126,40 @@ class Marginal():
 
         #percentage: It is necessary to interpolate:
 
-        p25_1 = np.argmin((self.inte-0.25)**2); p25_2 = np.argmax((self.inte-0.25)**2)
+        f = interpolate.interp1d(self.inte, self.z)
         
-        if p25_1 > p25_2:
-             self.p_25 = interpolate(.25, x1, y1, x2, y2)
+        self.p_25 = f(0.25).tolist()
+        self.p_50 = f(0.50).tolist()
+        self.p_75 = f(0.75).tolist()
 
-        
+        #----25:
+        #p25_1 = np.argmin((self.inte-0.25)**2); p25_2 = np.argmax((self.inte-0.25)**2)
+        #if p25_1 > p25_2:
+        #    self.p_25 = interpol(.25, self.inte[p25_1-1], self.inte[p25_1],
+        #                            self.z[p25_1-1], self.z[p25_1])
+        #else:
+        #    self.p_25 = interpol(.25, self.inte[p25_1], self.inte[p25_1+1],
+        #                             self.z[p25_1], self.z[p25_1+1])
+        #----50:
+        #p50_1 = np.argmin((self.inte-0.50)**2); p50_2 = np.argmax((self.inte-0.50)**2)
+        #if p50_1 > p50_2:
+        #    self.p_50 = interpol(.50, self.inte[p50_1-1], self.inte[p50_1],
+        #                            self.z[p50_1-1], self.z[p50_1])
+        #else:
+        #    self.p_50 = interpol(.50, self.inte[p50_1], self.inte[p50_1+1],
+        #                             self.z[p50_1], self.z[p50_1+1])
+        #----75:
+        #p75_1 = np.argmin((self.inte-0.75)**2); p75_2 = np.argmax((self.inte-0.75)**2)
+        #if p25_1 > p25_2:
+        #     self.p_75 = interpol(.75, self.inte[p75_1-1], self.inte[p75_1],
+        #                             self.z[p75_1-1], self.z[p75_1])
+        #else:
+        #    self.p_75 = interpol(.75, self.inte[p75_1], self.inte[p75_1+1],
+        #                             self.z[p75_1], self.z[p75_1+1])
 
-        
-        p50_1 = np.argmin((self.inte-0.50)**2); p50_2 = np.argmax((self.inte-0.50)**2)
-        p75_1 = np.argmin((self.inte-0.75)**2); p75_2 = np.argmax((self.inte-0.75)**2)
-
-        
-        percnt, x1, y1, x2, y
-
-        
-        self.p_25 = self.z[np.argmin((self.inte-0.25)**2)]
-        self.p_50 = self.z[np.argmin((self.inte-0.50)**2)]
-        self.p_75 = self.z[np.argmin((self.inte-0.75)**2)]
+        #self.p_25 = self.z[np.argmin((self.inte-0.25)**2)]
+        #self.p_50 = self.z[np.argmin((self.inte-0.50)**2)]
+        #self.p_75 = self.z[np.argmin((self.inte-0.75)**2)]
 
 
 

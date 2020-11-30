@@ -39,7 +39,7 @@ def round_sig(x, sig=2):
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
     m = [marginal_md, marginal_tau]
-    x = [marginal_md.space[-1], marginal_tau.space[-1]]
+    x = [marginal_md.z, marginal_tau.z]
     y = [marginal_md.marginal/marginal_md.marginal.max(),marginal_tau.marginal/marginal_tau.marginal.max()]
     #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
     fig, ax = plt.subplots(1, 2, figsize=(10.9,3.9))
@@ -75,7 +75,7 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
 #------------------------------------- For plots ------------------------------------------- 
 def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
-    x = [marginal_com[i].space[-1] for i in range(len(marginal_com))]
+    x = [marginal_com[i].z for i in range(len(marginal_com))]
     y = [marginal_com[i].marginal/marginal_com[i].marginal.max() for i in range(len(marginal_com))]
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
@@ -90,7 +90,7 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
         ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
                       label = r"25\% = " + str(round_sig(marginal_com[i].p_25, sf)) + " AU")
         ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2",
-                      label = r"50\% = " + str(round_sig(marginal_com[i].p_50, sf)) + " AU" )
+                      label = r"50\% = " + str(round_sig(marginal_com[i].p_50, sf)) + " AU")
         ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3",
                       label = r"75\% = " + str(round_sig(marginal_com[i].p_75, sf)) + " AU")
         ax[i].axvline(x = obs, ls='--', c="k",
@@ -105,7 +105,40 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
     plt.savefig("images/com/"+sys+".pdf")
     plt.show()
 
-#---------------------
+#------------------------------------- For plots ------------------------------------------- 
+def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6]):
+    sf = 2
+    #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
+
+    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(13.5, 12))
+    for m in range(0,3):
+        for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
+            ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
+                         label = "Probability "+sy[n])
+            ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
+            ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1",
+                            label = r"25\% = " + str(round_sig(marginal_mass[n][m].p_25, sf)) + unities[m])
+            ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2",
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf)) + unities[m])
+            ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3",
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_75, sf)) + unities[m])
+            ax[m,n].set_xlabel(name[m])
+            ax[m,n].legend()
+
+            if m == 0 : 
+                ax[m,n].set_xlim(0,0.003);
+
+            ax[0,n].set_ylabel(sy[n]); ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
+    
+    fig.tight_layout()
+    plt.show()
+            
+
+
+
+
+
+
 #maginals_Ms is the list of marginals of Mt, Mjup and Mr
 '''
 def mplot_Mass(marginal_Ms, obs, sys):
