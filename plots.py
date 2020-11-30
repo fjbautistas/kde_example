@@ -106,7 +106,7 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
     plt.show()
 
 #------------------------------------- For plots ------------------------------------------- 
-def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6]):
+def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
@@ -114,23 +114,29 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     for m in range(0,3):
         for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
             ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
-                         label = "Probability "+sy[n])
+                         label = "Probability "+sy[m])
             ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
             ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1",
-                            label = r"25\% = " + str(round_sig(marginal_mass[n][m].p_25, sf)) + unities[m])
+                            label = r"25\% = " + "{:.1e}".format(marginal_mass[n][m].p_25) +" "+ unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2",
-                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf)) + unities[m])
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf)) +" "+ unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3",
-                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_75, sf)) + unities[m])
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_75, sf)) +" "+ unities[m])
+
+            ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
+            
             ax[m,n].set_xlabel(name[m])
             ax[m,n].legend()
 
-            if m == 0 : 
-                ax[m,n].set_xlim(0,0.003);
+            if m == 0 :  ax[m,n].set_xlim(0,0.003); ax[m,n].set_title(t[n])
+            elif m == 1: ax[m,n].set_xlim(0,1.25);
+            else: ax[m,n].set_xlim(0,1000)
 
-            ax[0,n].set_ylabel(sy[n]); ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
+            if n == 0 :  
+                ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
     
     fig.tight_layout()
+    plt.subplots_adjust(wspace=.07)
     plt.show()
             
 
