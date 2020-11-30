@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import matplotlib as mpl
 from Methods import *
+from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,AutoMinorLocator)
+import matplotlib.ticker as mtick
+
 import warnings; warnings.simplefilter('ignore')
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}', r'\usepackage{wasysym}']
@@ -15,9 +18,9 @@ plt.style.use('./images/img.mplstyle')
 #================================== Names and symbols ======================================
 names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
          r"Center of mass $r_{\text{cm}}$ [AU]",
-         r"Total planetary mass $M_{tp}$ [$M_\odot$]",
-         r"Giant planetary mass $M_{\jupiter}$ [$M_\text{jup}$]",
-         r"Rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
+         r"Total planet mass $M_{tp}$ [$M_\odot$]",
+         r"Giant planet mass $M_{\jupiter}$ [$M_\text{jup}$]",
+         r"Rocky planet  mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
          r"Number of giants $N_{\jupiter}$", r"Number of giants $N_{t}$"]
 
 sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{cm}}\right)$",
@@ -110,33 +113,39 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
-    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(13.5, 12))
+    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14, 12))
     for m in range(0,3):
         for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
             ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
                          label = "Probability "+sy[m])
-            ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
+            #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
             ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1",
                             label = r"25\% = " + "{:.1e}".format(marginal_mass[n][m].p_25) +" "+ unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2",
-                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf)) +" "+ unities[m])
+                            label = r"50\% = " + "{:.1e}".format(marginal_mass[n][m].p_50) +" "+ unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3",
-                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_75, sf)) +" "+ unities[m])
+                            label = r"75\% = " + "{:.1e}".format(marginal_mass[n][m].p_75) +" "+ unities[m])
+            #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
+            ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
 
-            ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
-            
-            ax[m,n].set_xlabel(name[m])
-            ax[m,n].legend()
-
-            if m == 0 :  ax[m,n].set_xlim(0,0.003); ax[m,n].set_title(t[n])
-            elif m == 1: ax[m,n].set_xlim(0,1.25);
+            if m == 0 :
+                ax[m,n].set_xlim(0,0.0045);
+                ax[m,n].set_title(t[n])
+                ax[m,n].axvline(x = obs, ls='--', c="k",
+                                label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
+                
+            elif m == 1: ax[m,n].set_xlim(0,1.3);
             else: ax[m,n].set_xlim(0,1000)
 
             if n == 0 :  
                 ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
-    
+
+            ax[m,n].set_xlabel(name[m])
+            ax[m,n].legend()
+            
     fig.tight_layout()
-    plt.subplots_adjust(wspace=.07)
+    plt.subplots_adjust(wspace=.12)
+    plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
             
 
