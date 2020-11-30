@@ -113,7 +113,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
-    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14, 12))
+    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
     for m in range(0,3):
         for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
             ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),

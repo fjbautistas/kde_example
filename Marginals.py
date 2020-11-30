@@ -20,12 +20,12 @@ s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-4
 
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
-'''
-Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
-like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
-tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
-like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-l_md_tau = [like_md, like_tau]
+
+#Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
+#like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
+#tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
+#like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+#l_md_tau = [like_md, like_tau]
 
 def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
     Marginls = []
@@ -44,8 +44,8 @@ def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
     mplot_md_tau(Marginls[0], Marginls[3], sistemas[0])
 
 # -------- com ----------
-com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
-like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+#com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
+#like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 
 def predict_com(sistemas, likelihoods, data = data, obs_data = obs_data):
     Marginls = []
@@ -57,7 +57,6 @@ def predict_com(sistemas, likelihoods, data = data, obs_data = obs_data):
                         data[m].metal, data[m]["com"])
         Marg.pdf(); Marginls.append(Marg)
     mplot_com(Marginls, systm.com.values[0], sistemas[0])
-'''
 
 # -------- Masses ----------    
 mtp = pd.read_csv('data/ls_300/like_Mtp.csv',index_col=None);
@@ -81,9 +80,9 @@ def predict_mass(sistemas, likelihoods, data = data, obs_data = obs_data):
             Marg.pdf(); m.append(Marg)
         Marginls.append(m)
     mplot_mass(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])   
-    return Marginls
+return Marginls
 
-
+# ---- Number of planets ------   
 
 
 #===============================================================================================================================================================================
