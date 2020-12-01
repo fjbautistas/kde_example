@@ -57,7 +57,7 @@ def predict_com(sistemas, likelihoods, data = data, obs_data = obs_data):
                         data[m].metal, data[m]["com"])
         Marg.pdf(); Marginls.append(Marg)
     mplot_com(Marginls, systm.com.values[0], sistemas[0])
-'''
+
 # -------- Masses ----------    
 mtp = pd.read_csv('data/ls_300/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
@@ -81,22 +81,30 @@ def predict_mass(sistemas, likelihoods, data = data, obs_data = obs_data):
         Marginls.append(m)
     mplot_mass(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])   
     #return Marginls
+'''
 
 # ---- Number of planets ------   
+ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
+like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
+like_ntp = [ntp[str(ntp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+nplanets = pd.read_csv('data/ls_300/like_nplanets.csv',index_col=None);
+like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+like_num = [like_nplanets, like_ngi, like_ntp]
 
-
-#===============================================================================================================================================================================
-# ------- com ----------
-#ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
-#like_ngi = [ngi[str#(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-#ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
-#like_ntp = [ntp[str#(ntp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-#nplanets = pd.read_csv('data/ls_300/like_nplanets.csv',index_col=None);
-#like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-
-#likelihoods = [like_md, like_tau, like_com, like_mtp, like_mjup, like_mrock, like_nplanets, like_ngi, like_ntp]
-#========================================================== names, variables and unities ======================================================================================
-#Primary transit: Kepler-289, TRAPPIST-1, K2-3, K2-138, TOI-125
-#radial velocity: WASP-47, GJ 876 
-#========================================================================== Priors ============================================================================================
-# sitemas is a list sublist of s or the complete list 
+def predict_num(sistemas, likelihoods, data = data, obs_data = obs_data):
+    var = ["nplanets","ngi","npt"]
+    systm = obs_data[obs_data.sys_name == sistemas[0]]
+    Marginls = []
+    for i in range(0,3):
+        p = prior([data[i].ms, data[i].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+        p.prior_pdf()
+        #Marginls.append(p)
+        m = []
+        for j in range(len(likelihoods)):
+            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i].metal, data[i][var[j]])
+            Marg.pdf(); m.append(Marg)
+        Marginls.append(m)
+    mplot_num(Marginls, 0, sistemas[0])
+    return Marginls
+ 

@@ -39,9 +39,50 @@ def round_sig(x, sig=2):
 
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
+def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], unities=unities[3:6], t = titles):
+    sf = 2
+    #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
+
+    fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
+    for m in range(0,3):
+        for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
+            ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].marginal/marginal_num[n][m].marginal.max(),
+                         label = "Probability "+sy[m])
+            ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].inte, label = "acumulative")
+            ax[m,n].axvline(x = marginal_num[n][m].p_25,ls='--', c="C1",
+                            label = r"25\% = " +  str(round_sig(marginal_num[n][m].p_25, sf)) +" "+unities[m])
+
+
+            
+            ax[m,n].axvline(x = marginal_num[n][m].p_50,ls='--', c="C2",
+                            label = r"50\% = " + "{:.1e}".format(marginal_num[n][m].p_50) +" "+ unities[m])
+            ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
+                            label = r"75\% = " + "{:.1e}".format(marginal_num[n][m].p_75) +" "+ unities[m])
+            ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
+            ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
+
+            if m == 0 :
+                ax[m,n].set_title(t[n])
+            #    ax[m,n].axvline(x = obs, ls='--', c="k",
+            #                    label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
+                
+            #elif m == 1: ax[m,n].set_xlim(0,1.3);
+            #else: ax[m,n].set_xlim(0,1000)
+
+            if n == 0 :  
+                ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
+
+            ax[m,n].set_xlabel(name[m])
+            ax[m,n].legend()
+            
+    fig.tight_layout()
+    plt.subplots_adjust(wspace=.11)
+    plt.savefig("images/n_planets/"+sys+".pdf")
+    plt.show()
+
+'''
 def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
-    size = 
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
     fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
@@ -80,8 +121,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     plt.show()
             
 
-
-'''
+#------------------------------------- For plots ------------------------------------------- 
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
     m = [marginal_md, marginal_tau]
@@ -117,6 +157,7 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     fig.tight_layout(rect=[-0.02, -0.02, 1, 1])
     plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
+
 
 #------------------------------------- For plots ------------------------------------------- 
 def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities):

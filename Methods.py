@@ -67,7 +67,7 @@ class prior():
         self.lenght = 300
         self.org_data = np.array(args)
         self.pdfs = []         
-    
+        
         self.data = np.vstack([*varbs]).T
         self.data_std = (self.data-np.mean(self.data, axis=0))\
             /np.std(self.data, axis=0) # standarization     
