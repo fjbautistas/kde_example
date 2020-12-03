@@ -21,7 +21,7 @@ names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
          r"Total planet mass $M_{tp}$ [$M_\odot$]",
          r"Giant planet mass $M_{\jupiter}$ [$M_\text{jup}$]",
          r"Rocky planet  mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
-         r"Number of giants $N_{\jupiter}$", r"Number of giants $N_{t}$"]
+         r"Number of giants planets $N_{\jupiter}$", r"Number of rocky planets $N_{\oplus}$"]
 
 sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{cm}}\right)$",
          r"$p\left(M_{tp}\right)$", r"$p\left(M_{\jupiter}\right)$",
@@ -39,7 +39,7 @@ def round_sig(x, sig=2):
 
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
-def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], unities=unities[3:6], t = titles):
+def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
@@ -48,27 +48,26 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], unities=unit
         for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
             ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].marginal/marginal_num[n][m].marginal.max(),
                          label = "Probability "+sy[m])
-            ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].inte, label = "acumulative")
-            ax[m,n].axvline(x = marginal_num[n][m].p_25,ls='--', c="C1",
-                            label = r"25\% = " +  str(round_sig(marginal_num[n][m].p_25, sf)) +" "+unities[m])
-
-
-            
-            ax[m,n].axvline(x = marginal_num[n][m].p_50,ls='--', c="C2",
-                            label = r"50\% = " + "{:.1e}".format(marginal_num[n][m].p_50) +" "+ unities[m])
-            ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
-                            label = r"75\% = " + "{:.1e}".format(marginal_num[n][m].p_75) +" "+ unities[m])
-            ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
-            ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
-
+            #ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].inte, label = "acumulative")
+            #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")           
             if m == 0 :
                 ax[m,n].set_title(t[n])
-            #    ax[m,n].axvline(x = obs, ls='--', c="k",
-            #                    label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
+                ax[m,n].axvline(x = obs, ls='--', c="k",
+                                label = r"observed = "+  str(round(obs)))
                 
-            #elif m == 1: ax[m,n].set_xlim(0,1.3);
-            #else: ax[m,n].set_xlim(0,1000)
-
+            if m == 1:
+                ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
+                                label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
+                ax[m,n].set_xlim(0,3)
+                
+            else: 
+                ax[m,n].axvline(x = marginal_num[n][m].p_25,ls='--', c="C1",
+                                label = r"25\% = " + str(round(marginal_num[n][m].p_25)))
+                ax[m,n].axvline(x = marginal_num[n][m].p_50,ls='--', c="C2",
+                                label = r"50\% = " + str(round(marginal_num[n][m].p_50)))
+                ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
+                                label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
+                
             if n == 0 :  
                 ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
 
