@@ -40,7 +40,7 @@ def round_sig(x, sig=2):
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
 def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
-    sf = 2
+    sf, lw = 2, 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
     fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
@@ -49,28 +49,33 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
             ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].marginal/marginal_num[n][m].marginal.max(),
                          label = "Probability "+sy[m])
             #ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].inte, label = "acumulative")
-            #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")           
+            #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
+            if m == 2 :  
+                ax[m,n].axvline(x = 4, ls='-', lw = lw,  c="C4", label = r"Solar System = "+str(4))
+
             if m == 0 :
                 ax[m,n].set_title(t[n])
-                ax[m,n].axvline(x = obs, ls='--', c="k",
-                                label = r"observed = "+  str(round(obs)))
+                ax[m,n].axvline(x = 8, ls='-',lw = lw,  c="C4",label = r"Solar System = "+str(8))
+                ax[m,n].axvline(x = obs, ls='-',lw = lw,  c="k",label = r"observed = "+  str(round(obs)))
                 
             if m == 1:
-                ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
+                ax[m,n].axvline(x = 4, ls='-', lw = lw, c="C4",
+                                label = r"Solar System = "+str(4))
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
                                 label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
                 ax[m,n].set_xlim(0,3)
                 
             else: 
-                ax[m,n].axvline(x = marginal_num[n][m].p_25,ls='--', c="C1",
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_25), ls='--', c="C1", lw = 1.5, 
                                 label = r"25\% = " + str(round(marginal_num[n][m].p_25)))
-                ax[m,n].axvline(x = marginal_num[n][m].p_50,ls='--', c="C2",
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_50), ls='--', c="C2", lw = 1.5, 
                                 label = r"50\% = " + str(round(marginal_num[n][m].p_50)))
-                ax[m,n].axvline(x = marginal_num[n][m].p_75,ls='--', c="C3",
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
                                 label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
                 
             if n == 0 :  
                 ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
-
+                
             ax[m,n].set_xlabel(name[m])
             ax[m,n].legend()
             
@@ -90,11 +95,11 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
             ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
                          label = "Probability "+sy[m])
             #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
-            ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1",
+            ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1", lw = 1.5,
                             label = r"25\% = " + "{:.1e}".format(marginal_mass[n][m].p_25) +" "+ unities[m])
-            ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2",
+            ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2", lw = 1.5,
                             label = r"50\% = " + "{:.1e}".format(marginal_mass[n][m].p_50) +" "+ unities[m])
-            ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3",
+            ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3", lw = 1.5,
                             label = r"75\% = " + "{:.1e}".format(marginal_mass[n][m].p_75) +" "+ unities[m])
             #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
             ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
@@ -102,7 +107,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
             if m == 0 :
                 ax[m,n].set_xlim(0,0.0045);
                 ax[m,n].set_title(t[n])
-                ax[m,n].axvline(x = obs, ls='--', c="k",
+                ax[m,n].axvline(x = obs, ls='--', c="k", lw = 1.5,
                                 label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
                 
             elif m == 1: ax[m,n].set_xlim(0,1.3);
