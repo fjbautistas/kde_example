@@ -84,6 +84,7 @@ def predict_mass(sistemas, likelihoods, data = data, obs_data = obs_data):
 '''
 
 # ---- Number of planets ------   
+'''
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
@@ -108,3 +109,4 @@ def predict_num(sistemas, likelihoods, data = data, obs_data = obs_data):
     mplot_num(Marginls, systm.n_planets.values[0], sistemas[0])
     return Marginls
  
+'''
