@@ -21,12 +21,12 @@ s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-4
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
 
-#Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
-#like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
-#tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
-#like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-#l_md_tau = [like_md, like_tau]
-'''
+Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
+like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
+tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
+like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+l_md_tau = [like_md, like_tau]
+
 def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
     Marginls = []
     for k in range(len(sistemas)):
@@ -41,8 +41,8 @@ def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
                                 data[m].ms,data[m].metal, data[m][variables[n]])
                 Marg.pdf(); Marginls.append(Marg)
                 
-    mplot_md_tau(Marginls[0], Marginls[3], sistemas[0])
-
+    mplot_md_tau(Marginls[0], Marginls[3], sistemas[0], 0)
+'''
 # -------- com ----------
 #com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
 #like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
@@ -103,7 +103,7 @@ def predict_num(sistemas, likelihoods, data = data, obs_data = obs_data):
         #Marginls.append(p)
         m = []
         for j in range(len(likelihoods)):
-            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i].metal, data[i][var[j]])
+p            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i].metal, data[i][var[j]])
             Marg.pdf(); m.append(Marg)
         Marginls.append(m)
     mplot_num(Marginls, systm.n_planets.values[0], sistemas[0])

@@ -39,6 +39,7 @@ def round_sig(x, sig=2):
 
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
+'''
 def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     sf, lw = 2, 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -84,7 +85,7 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     plt.savefig("images/n_planets/"+sys+".pdf")
     plt.show()
 
-'''
+
 def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -124,7 +125,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
             
-
+'''
 #------------------------------------- For plots ------------------------------------------- 
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
@@ -164,6 +165,7 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
 
 
 #------------------------------------- For plots ------------------------------------------- 
+'''
 def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
     x = [marginal_com[i].z for i in range(len(marginal_com))]
@@ -195,8 +197,8 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
     fig.tight_layout()
     plt.savefig("images/com/"+sys+".pdf")
     plt.show()
-'''
+
 #------------------------------------- For plots ------------------------------------------- 
 
             
-
+'''
