@@ -65,20 +65,34 @@ class prior():
     
     def __init__(self, varbs, *args):
         self.lenght = 300
-        self.org_data = np.array(args)
-        self.pdfs = []         
+        self.org_data = args
+
+        print(args)
+        print(self.org_data[0][0].values, self.org_data[0][1].values)
+        print(self.org_data[1][0].values, self.org_data[1][1].values)
         
         self.data = np.vstack([*varbs]).T
         self.data_std = (self.data-np.mean(self.data, axis=0))\
             /np.std(self.data, axis=0) # standarization     
 
+        mu1 = (self.org_data[0][0] - np.mean(self.data, axis=0)[0])/np.std(self.data, axis=0)[0]
+        sigma1 = self.org_data[0][1]/np.std(self.data, axis = 0)[0]
+        
+        mu2 = (self.org_data[1][0] - np.mean(self.data, axis=0)[1])/np.std(self.data, axis=0)[1]
+        sigma2 = self.org_data[1][1]/np.std(self.data, axis = 0)[1]
+
+        self.mu = [mu1[0],mu2[0]]
+        self.sigma = [sigma1[0],sigma2[0]]
+        
     def prior_pdf(self):
+        self.pdfs = []         
         for i in range(len(self.org_data[0])):
             x = np.linspace(self.data_std[:,i].min(),
                             self.data_std[:,i].max(),
                             self.lenght)
-            pdf = stats.norm.pdf(x,loc = self.org_data[0][i][0], 
-                                 scale = self.org_data[0][i][1])       
+                       
+            pdf = stats.norm.pdf(x,loc = self.mu[i], scale = self.sigma[i])
+            
             self.pdfs.append(pdf)
             
         if len(self.org_data[0]) == 2:

@@ -27,18 +27,18 @@ tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
 like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 l_md_tau = [like_md, like_tau]
 
-def predict_md_tau(sistemas, likelihoods, data = data, obs_data = obs_data):
+def predict_md_tau(sistemas, likelihoods, datal = data, obs_data = obs_data):
     Marginls = []
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]]
 
         for m in range(0,3):
-            p = prior([data[m].ms, data[m].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+            p = prior([datal[m].ms, datal[m].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
             p.prior_pdf()
 
             for n in range(len(likelihoods)):
                 Marg = Marginal(likelihoods[n][m], p.pdf_prior,
-                                data[m].ms,data[m].metal, data[m][variables[n]])
+                                data[m].ms,datal[m].metal, datal[m][variables[n]])
                 Marg.pdf(); Marginls.append(Marg)
                 
     mplot_md_tau(Marginls[0], Marginls[3], sistemas[0], 0)
