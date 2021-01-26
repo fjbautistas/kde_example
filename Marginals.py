@@ -33,7 +33,8 @@ def predict_md_tau(sistemas, likelihoods, datal = data, obs_data = obs_data):
         systm = obs_data[obs_data.sys_name == sistemas[k]]
 
         for m in range(0,3):
-            p = prior([datal[m].ms, datal[m].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+            p = prior([datal[m].ms, datal[m].metal],[systm.ms.values, systm.dms.values,
+                                                     systm.metal.values,systm.dmetal.values])
             p.prior_pdf()
 
             for n in range(len(likelihoods)):
