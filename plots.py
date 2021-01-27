@@ -125,7 +125,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
             
-'''
+
 #------------------------------------- For plots ------------------------------------------- 
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
@@ -199,6 +199,3 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
     plt.show()
 
 #------------------------------------- For plots ------------------------------------------- 
-
-            
-'''

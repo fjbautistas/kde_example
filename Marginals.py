@@ -20,7 +20,7 @@ s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-4
 
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
-
+'''
 Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
 like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
 tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
@@ -45,14 +45,14 @@ def predict_md_tau(sistemas, likelihoods, datal = data, obs_data = obs_data):
     mplot_md_tau(Marginls[0], Marginls[3], sistemas[0], 0)
 '''
 # -------- com ----------
-#com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
-#like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
+like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 
-def predict_com(sistemas, likelihoods, data = data, obs_data = obs_data):
+def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_data):
     Marginls = []
     systm = obs_data[obs_data.sys_name == sistemas[0]]
     for m in range(len(likelihoods)):
-        p = prior([data[m].ms, data[m].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+        p = prior([data[m].ms, data[m].metal],[systm.ms, systm.dms,systm.metal,systm.dmetal])
         p.prior_pdf()
         Marg = Marginal(likelihoods[m], p.pdf_prior, data[m].ms,
                         data[m].metal, data[m]["com"])
@@ -60,6 +60,7 @@ def predict_com(sistemas, likelihoods, data = data, obs_data = obs_data):
     mplot_com(Marginls, systm.com.values[0], sistemas[0])
 
 # -------- Masses ----------    
+'''
 mtp = pd.read_csv('data/ls_300/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300/like_Mjup.csv',index_col=None);
