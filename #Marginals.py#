@@ -58,9 +58,9 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
                         data[m].metal, data[m]["com"])
         Marg.pdf(); Marginls.append(Marg)
     mplot_com(Marginls, systm.com.values[0], sistemas[0])
-
-# -------- Masses ----------    
 '''
+# -------- Masses ----------    
+
 mtp = pd.read_csv('data/ls_300/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300/like_Mjup.csv',index_col=None);
