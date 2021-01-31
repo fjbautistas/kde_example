@@ -81,7 +81,7 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
             Marg.pdf();
             m.append(Marg)
     Marginls.append(m)
-    return Marginls
+    #return Marginls
     mplot_mass2(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])
 
 '''

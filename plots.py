@@ -130,38 +130,36 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
-    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(1, 12))
+    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(14, 4))
     for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
-        ax[m,n].plot(marginal_mass[0][n].z, marginal_mass[0][n].marginal/marginal_mass[0][n].marginal.max(),
+        ax[n].plot(marginal_mass[0][n].z, marginal_mass[0][n].marginal/marginal_mass[0][n].marginal.max(),
                      label = "Probability "+sy[n])
         #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
-        ax[m,n].axvline(x = marginal_mass[0][n].p_25,ls='--', c="C1", lw = 1.5,
+        ax[n].axvline(x = marginal_mass[0][n].p_25,ls='--', c="C1", lw = 1.5,
                         label = r"25\% = " + "{:.1e}".format(marginal_mass[0][n].p_25) +" "+ unities[n])
-        ax[m,n].axvline(x = marginal_mass[0][n].p_50,ls='--', c="C2", lw = 1.5,
+        ax[n].axvline(x = marginal_mass[0][n].p_50,ls='--', c="C2", lw = 1.5,
                         label = r"50\% = " + "{:.1e}".format(marginal_mass[0][n].p_50) +" "+ unities[n])
-        ax[m,n].axvline(x = marginal_mass[0][n].p_75,ls='--', c="C3", lw = 1.5,
+        ax[n].axvline(x = marginal_mass[0][n].p_75,ls='--', c="C3", lw = 1.5,
                         label = r"75\% = " + "{:.1e}".format(marginal_mass[0][n].p_75) +" "+ unities[n])
         #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
-        ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
-        '''
-            if m == 0 :
-                ax[m,n].set_xlim(0,0.0045);
-                ax[m,n].set_title(t[n])
-                ax[m,n].axvline(x = obs, ls='--', c="k", lw = 1.5,
-                                label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
-                
-            elif m == 1: ax[m,n].set_xlim(0,1.3);
-            else: ax[m,n].set_xlim(0,1000)
-
-            if n == 0 :  
-                ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
-
-            ax[m,n].set_xlabel(name[m])
-            ax[m,n].legend()
-        '''  
+        ax[n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
+        ax[n].set_title(t[n])
+        
+        if n == 0 :
+            ax[n].set_xlim(0,0.0045);
+            ax[n].axvline(x = obs, ls='--', c="k", lw = 1.5,
+                          label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[n])
+            
+        elif n == 1: ax[n].set_xlim(0,1.3);
+        else: ax[n].set_xlim(0,1000)
+        #if n == 0 :  
+        ax[n].set_ylabel(sy[n]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2]) 
+        ax[n].set_xlabel(name[n])
+        ax[n].legend()
+    
     fig.tight_layout()
     plt.subplots_adjust(wspace=.11)
-    #plt.savefig("images/masses/"+sys+"_2.pdf")
+    plt.savefig("images/masses/"+sys+"_2.pdf")
     plt.show()
 
     
