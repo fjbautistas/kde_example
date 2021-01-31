@@ -69,6 +69,23 @@ mrock = pd.read_csv('data/ls_300/like_Mrock.csv',index_col=None);
 like_mrock = [mrock[str(mrock.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_m = [like_mtp, like_mjup, like_mrock]
 
+def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_data):
+    var = ["Mtp","Mjup","Mrock"]
+    systm = obs_data[obs_data.sys_name == sistemas[0]]
+    Marginls = []
+    p = prior([data[0].ms, data[0].metal],[systm.ms, systm.dms, systm.metal,systm.dmetal])
+    p.prior_pdf()
+    m = []
+    for j in range(len(likelihoods)):
+            Marg = Marginal(likelihoods[j][0], p.pdf_prior, data[0].ms, data[0].metal, data[0][var[j]])
+            Marg.pdf();
+            m.append(Marg)
+    Marginls.append(m)
+    return Marginls
+    mplot_mass2(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])
+
+'''
+# plots 3x3.
 def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_data):
     var = ["Mtp","Mjup","Mrock"]
     systm = obs_data[obs_data.sys_name == sistemas[0]]
@@ -84,10 +101,9 @@ def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_dat
         Marginls.append(m)
     mplot_mass(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])   
     #return Marginls
-
-
+    
 # ---- Number of planets ------   
-'''
+
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
