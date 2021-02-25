@@ -143,7 +143,7 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
                         label = r"75\% = " + "{:.1e}".format(marginal_mass[0][n].p_75) +" "+ unities[n])
         #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
         ax[n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
-        ax[n].set_title(t[n])
+        #ax[n].set_title(t[n])
         
         if n == 0 :
             ax[n].set_xlim(0,0.0045);
