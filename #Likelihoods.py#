@@ -29,11 +29,8 @@ com_h = optimal_pdf(dh.ms, dh.metal, dh.com); like_com_h = com_h.pdf();
 likelihoods_com = pd.DataFrame({'com_n':like_com_n, 'com_l':like_com_l, 'com_h':like_com_h})
 likelihoods_com.to_csv("data/likelihoods/like_com.csv")
 
-'''
 # Mtp total mass
 Mtp_n = optimal_pdf(dn.ms, dn.metal, dn.M_tp); like_Mtp_n = Mtp_n.pdf(); 
-
-'''
 Mtp_l = optimal_pdf(dl.ms, dl.metal, dl.M_tp); like_Mtp_l = Mtp_l.pdf(); 
 Mtp_h = optimal_pdf(dh.ms, dh.metal, dh.M_tp); like_Mtp_h = Mtp_h.pdf(); 
 

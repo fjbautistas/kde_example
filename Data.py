@@ -4,8 +4,9 @@ import pandas as pd
 import warnings; warnings.simplefilter('ignore')
 #============================== Data Variables ==========================
 
-mass = (9.547919)
+mass     = (9.547919)
 mass_jup = (1/mass)*(10**4)
+m_jup    = 317.8 # terrestrial masses.
 mass_earth = 332946
 
 dn=pd.read_csv('data/proc_no_pert.csv',index_col=None)#, usecols = ["ms","md","metal","taugas","com",
@@ -14,31 +15,30 @@ dl=pd.read_csv('data/proc_lo_pert.csv',index_col=None)#, usecols = ["ms","md","m
                                                       #            "massefficiency","nplanets", "ngi"]); 
 dh=pd.read_csv('data/proc_hi_pert.csv',index_col=None)#, usecols = ["ms","md","metal","taugas","com",
                                                       #            "massefficiency","nplanets", "ngi"]); 
-#--------total rocky planets -----
-dn = dn.assign(npt = dn["nplanets"]-dn["ngi"])
-dl = dl.assign(npt = dl["nplanets"]-dl["ngi"])
-dh = dh.assign(npt = dh["nplanets"]-dh["ngi"])
+#--------total number of rocky planets -----
+dn = dn.assign(n_r = dn["nplanets"]-dn["ngi"])
+dl = dl.assign(n_r = dl["nplanets"]-dl["ngi"])
+dh = dh.assign(n_r = dh["nplanets"]-dh["ngi"])
 
-#--------- total masss -----------
-dn = dn.assign(Mtp = dn["massefficiency"]*dn["md"])
-dl = dl.assign(Mtp = dl["massefficiency"]*dl["md"])
-dh = dh.assign(Mtp = dh["massefficiency"]*dh["md"])
+#--------total planet masss (Mjup)-----------
+dn = dn.assign(M_tp = dn["massbudget"]*(1/m_jup))
+dl = dl.assign(M_tp = dl["massbudget"]*(1/m_jup))
+dh = dh.assign(M_tp = dh["massbudget"]*(1/m_jup))
 
-#------- total giant mass -------
-dn = dn.assign(Mjup = ((dn["ngi"]*dn["Mtp"]).divide(dn["nplanets"]))*mass_jup)
-dl = dl.assign(Mjup = ((dl["ngi"]*dl["Mtp"]).divide(dl["nplanets"]))*mass_jup)
-dh = dh.assign(Mjup = ((dh["ngi"]*dh["Mtp"]).divide(dh["nplanets"]))*mass_jup)
+#-------- total giant mass (Mjup ) ----------
+dn = dn.assign(M_gi = (dn["massbudget"]-dn["mtr"])*(1/m_jup))
+dl = dl.assign(M_gi = (dn["massbudget"]-dn["mtr"])*(1/m_jup))
+dh = dh.assign(M_gi = (dn["massbudget"]-dn["mtr"])*(1/m_jup))
 
 #-------- total rocky mass --------
-dn = dn.assign(Mrock = (dn["Mtp"]-(dn["Mjup"]*(mass*10**(-4))))*mass_earth)
-dl = dl.assign(Mrock = (dl["Mtp"]-(dl["Mjup"]*(mass*10**(-4))))*mass_earth)
-dh = dh.assign(Mrock = (dh["Mtp"]-(dh["Mjup"]*(mass*10**(-4))))*mass_earth)
-
+dn = dn.assign(M_rock = dn["mtr"])
+dl = dl.assign(M_rock = dl["mtr"])
+dh = dh.assign(M_rock = dh["mtr"])
 
 # reorder
-dn = dn[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
-dl = dl[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
-dh = dh[["ms", "metal", "md", "taugas", "com", "Mtp", "Mjup", "Mrock", "nplanets", "ngi", "npt"]]
+dn = dn[["ms", "metal", "md", "taugas", "com", "M_tp", "M_gi", "M_rock", "nplanets", "ngi", "n_r"]]
+dl = dl[["ms", "metal", "md", "taugas", "com", "M_tp", "M_gi", "M_rock", "nplanets", "ngi", "n_r"]]
+dh = dh[["ms", "metal", "md", "taugas", "com", "M_tp", "M_gi", "M_rock", "nplanets", "ngi", "n_r"]]
 
 
 dn.to_csv(r'data/no_p.csv', index = False)
