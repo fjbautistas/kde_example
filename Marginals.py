@@ -61,16 +61,16 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
 '''
 # -------- Masses ----------    
 
-mtp = pd.read_csv('data/ls_300/like_Mtp.csv',index_col=None);
+mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
-mjup= pd.read_csv('data/ls_300/like_Mjup.csv',index_col=None);
+mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
 like_mjup = [mjup[str(mjup.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
-mrock = pd.read_csv('data/ls_300/like_Mrock.csv',index_col=None);
+mrock = pd.read_csv('data/ls_300_M/like_Mrock.csv',index_col=None);
 like_mrock = [mrock[str(mrock.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_m = [like_mtp, like_mjup, like_mrock]
 
 def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_data):
-    var = ["Mtp","Mjup","Mrock"]
+    var = ["M_tp","M_gi","M_rock"]
     systm = obs_data[obs_data.sys_name == sistemas[0]]
     Marginls = []
     p = prior([data[0].ms, data[0].metal],[systm.ms, systm.dms, systm.metal,systm.dmetal])
@@ -82,7 +82,7 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
             m.append(Marg)
     Marginls.append(m)
     #return Marginls
-    mplot_mass2(Marginls, systm.Mtp.values[0]*0.0009543, sistemas[0])
+    mplot_mass2(Marginls, systm.Mtp.values[0], sistemas[0])
 
 '''
 # plots 3x3.
