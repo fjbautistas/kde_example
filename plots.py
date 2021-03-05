@@ -134,27 +134,27 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
     for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
         ax[n].plot(marginal_mass[0][n].z, marginal_mass[0][n].marginal/marginal_mass[0][n].marginal.max(),
                      label = "Probability "+sy[n])
-        #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
+        #ax[n].plot(marginal_mass[0][n].z, marginal_mass[0][n].inte, label = "acumulative")
         ax[n].axvline(x = marginal_mass[0][n].p_25,ls='--', c="C1", lw = 1.5,
-                        label = r"25\% = " + str(marginal_mass[0][n].p_25))
+                        label = r"25\% = " + str(round_sig(marginal_mass[0][n].p_25, sf))+" "+unities[n])
         ax[n].axvline(x = marginal_mass[0][n].p_50,ls='--', c="C2", lw = 1.5,
-                        label = r"50\% = " + str(marginal_mass[0][n].p_50))
+                        label = r"50\% = " + str(round_sig(marginal_mass[0][n].p_50, sf))+" "+unities[n])
         ax[n].axvline(x = marginal_mass[0][n].p_75,ls='--', c="C3", lw = 1.5,
-                        label = r"75\% = " + str(marginal_mass[0][n].p_75))
-        #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
+                        label = r"75\% = " + str(round_sig(marginal_mass[0][n].p_75, sf))+" "+unities[n])
+        #ax[n].axhline(0.25, ls=":"); ax[n].axhline(0.5, ls=":"); ax[n].axhline(0.75,ls=":")
         #ax[n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
         #ax[n].set_title(t[n])
         
-        #if n == 0 :
-        #    ax[n].set_xlim(0,0.0045);
-        #    ax[n].axvline(x = obs, ls='--', c="k", lw = 1.5,
-        #                  label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[n])
+        if n == 0 :
+            ax[n].set_xlim(0,8);
+            ax[n].axvline(x = obs, ls='--', c="k", lw = 1.5,
+                          label = r"observed = "+ str(round_sig(obs, sf))+" "+unities[n])
             
-        #elif n == 1: ax[n].set_xlim(0,1.3);
-        #else: ax[n].set_xlim(0,1000)
+        elif n == 1: ax[n].set_xlim(0,8);
+        else: ax[n].set_xlim(0,40)
         #if n == 0 :  
-        #ax[n].set_ylabel(sy[n]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2]) 
-        #ax[n].set_xlabel(name[n])
+        ax[n].set_ylabel(sy[n]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2]) 
+        ax[n].set_xlabel(name[n])
         ax[n].legend()
     
     fig.tight_layout()
