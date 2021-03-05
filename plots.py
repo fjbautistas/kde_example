@@ -28,7 +28,7 @@ sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{c
          r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
          r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
 
-unities = [r"$M_\odot$", r"y", r"AU", r"$M_\text{jup}$", r"$M_\text{jup}$", r"$M_{\oplus}$"]
+unities = [r"$M_\odot$", r"y", r"AU", r"$M_\text{Jup}$", r"$M_\text{Jup}$", r"$M_{\oplus}$"]
 
 titles = ["No perturbations","Low perturbations","High perturbations"]
 #======================================= Methods ===========================================
@@ -84,7 +84,7 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/n_planets/"+sys+".pdf")
     plt.show()
-
+'''
 
 def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
@@ -97,22 +97,22 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
                          label = "Probability "+sy[m])
             #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
             ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1", lw = 1.5,
-                            label = r"25\% = " + "{:.1e}".format(marginal_mass[n][m].p_25) +" "+ unities[m])
+                            label = r"25\% = " + str(round_sig(marginal_mass[n][m].p_25, sf))+" "+unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2", lw = 1.5,
-                            label = r"50\% = " + "{:.1e}".format(marginal_mass[n][m].p_50) +" "+ unities[m])
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf))+" "+unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3", lw = 1.5,
-                            label = r"75\% = " + "{:.1e}".format(marginal_mass[n][m].p_75) +" "+ unities[m])
+                            label = r"75\% = " + str(round_sig(marginal_mass[n][m].p_25, sf))+" "+unities[m])
             #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
-            ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
+            #ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
 
             if m == 0 :
-                ax[m,n].set_xlim(0,0.0045);
+                ax[m,n].set_xlim(0,8);
                 ax[m,n].set_title(t[n])
                 ax[m,n].axvline(x = obs, ls='--', c="k", lw = 1.5,
-                                label = r"observed = "+ "{:.1e}".format(obs) +" "+ unities[m])
+                                label = r"observed = "+str(round_sig(obs, sf))+" "+unities[m])
                 
-            elif m == 1: ax[m,n].set_xlim(0,1.3);
-            else: ax[m,n].set_xlim(0,1000)
+            elif m == 1: ax[m,n].set_xlim(0,8);
+            else: ax[m,n].set_xlim(0,40)
 
             if n == 0 :  
                 ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
@@ -163,7 +163,7 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
     plt.show()
 
     
-'''
+
 #------------------------------------- For plots ------------------------------------------- 
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2

@@ -58,9 +58,8 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
                         data[m].metal, data[m]["com"])
         Marg.pdf(); Marginls.append(Marg)
     mplot_com(Marginls, systm.com.values[0], sistemas[0])
-'''
-# -------- Masses ----------    
 
+# -------- Masses ----------    
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
@@ -85,9 +84,18 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
     mplot_mass2(Marginls, systm.Mtp.values[0], sistemas[0])
 
 '''
+
+mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
+like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
+mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
+like_mjup = [mjup[str(mjup.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+mrock = pd.read_csv('data/ls_300_M/like_Mrock.csv',index_col=None);
+like_mrock = [mrock[str(mrock.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
+like_m = [like_mtp, like_mjup, like_mrock]
+
 # plots 3x3.
 def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_data):
-    var = ["Mtp","Mjup","Mrock"]
+    var = ["M_tp","M_gi","M_rock"]
     systm = obs_data[obs_data.sys_name == sistemas[0]]
     Marginls = []
     for i in range(0,3):
@@ -99,11 +107,11 @@ def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_dat
             Marg.pdf();
             m.append(Marg)
         Marginls.append(m)
-    mplot_mass(Marginls, systm.Mtp.values[0]*0.000954588, sistemas[0])   
+    mplot_mass(Marginls, systm.Mtp.values[0], sistemas[0])   
     #return Marginls
     
 # ---- Number of planets ------   
-
+'''
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
