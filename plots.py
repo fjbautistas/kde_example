@@ -18,8 +18,8 @@ plt.style.use('./images/img.mplstyle')
 #================================== Names and symbols ======================================
 names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
          r"Center of mass $r_{\text{cm}}$ [AU]",
-         r"Total planet mass $M_{tp}$ [$M_\odot$]",
-         r"Giant planet mass $M_{\jupiter}$ [$M_\text{jup}$]",
+         r"Total planet mass $M_{tp}$ [$M_\text{Jup}$]",
+         r"Giant planet mass $M_{\jupiter}$ [$M_\text{Jup}$]",
          r"Rocky planet  mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
          r"Number of giants planets $N_{\jupiter}$", r"Number of rocky planets $N_{\oplus}$"]
 
@@ -28,7 +28,7 @@ sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{c
          r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
          r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
 
-unities = [r"$M_\odot$", r"y", r"AU", r"$M_\text{Jup}$", r"$M_\text{Jup}$", r"$M_{\oplus}$"]
+unities = [r"$M_\odot$", r"y", r"AU", r"$M_\text{Jup}$", r"$M_\text{Jup}$", r"$M_\oplus$"]
 
 titles = ["No perturbations","Low perturbations","High perturbations"]
 #======================================= Methods ===========================================
@@ -101,7 +101,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
             ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2", lw = 1.5,
                             label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf))+" "+unities[m])
             ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3", lw = 1.5,
-                            label = r"75\% = " + str(round_sig(marginal_mass[n][m].p_25, sf))+" "+unities[m])
+                            label = r"75\% = " + str(round_sig(marginal_mass[n][m].p_75, sf))+" "+unities[m])
             #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
             #ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
 
@@ -112,7 +112,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
                                 label = r"observed = "+str(round_sig(obs, sf))+" "+unities[m])
                 
             elif m == 1: ax[m,n].set_xlim(0,8);
-            else: ax[m,n].set_xlim(0,40)
+            else: ax[m,n].set_xlim(0,35)
 
             if n == 0 :  
                 ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
