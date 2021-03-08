@@ -16,18 +16,18 @@ data = [dn,dl,dh]
 dim = 300
 #========================================================== names, variables and unities ======================================================================================
 variables = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi", "npt"]
-s= ["Kepler-289", "KOI-94", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
+s= ["Kepler-289", "KOI-94", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "Kepler-411","HD 38529", "TOI-125", "EPIC 249893012"]
 
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
-'''
+
 Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
 like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
 tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
 like_tau = [tau[str(tau.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 l_md_tau = [like_md, like_tau]
 
-def predict_md_tau(sistemas, likelihoods, datal = data, obs_data = obs_data):
+def predict_md_tau(sistemas, likelihoods = l_md_tau, datal = data, obs_data = obs_data):
     Marginls = []
     for k in range(len(sistemas)):
         systm = obs_data[obs_data.sys_name == sistemas[k]]
@@ -60,7 +60,7 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
         Marg.pdf(); Marginls.append(Marg)
     mplot_com(Marginls, systm.com.values[0], systm.dcom.values[0], sistemas[0])
 
-'''
+
 # -------- Masses ----------    
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 

@@ -166,6 +166,7 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
     
 
 #------------------------------------- For plots ------------------------------------------- 
+'''
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
     m = [marginal_md, marginal_tau]
@@ -196,13 +197,13 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
                           + "{:.1e}".format(m[i].p_75) +" "+ unities[i])
             plt.ticklabel_format(axis="x", style="sci", useOffset=False, 
                                  scilimits=(6,6), useMathText=True)
-        ax[i].legend()
+        ax[i].legend(handletextpad=.4, labelspacing=.25, loc=0)
     #fig.text(.49, .95, "System "+sys)
     fig.tight_layout(rect=[-0.02, -0.02, 1, 1])
-    plt.savefig("images/md_tau/"+sys+"md.pdf")
+    #plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
-'''
 
+'''
 #------------------------------------- For plots ------------------------------------------- 
 
 def mplot_com(marginal_com, obs, dobs, sys, name=names[2], sy=sym[2], unities=unities):
@@ -211,29 +212,33 @@ def mplot_com(marginal_com, obs, dobs, sys, name=names[2], sy=sym[2], unities=un
     y = [marginal_com[i].marginal/marginal_com[i].marginal.max() for i in range(len(marginal_com))]
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
-    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(13.5, 3.9))
+    fig, ax = plt.subplots(1, 3, sharey=True, figsize=(13.9, 4))
     ax[0].set_ylabel(sy)
     for i in range(0,3):
         #ax[i].plot(x[i], z[i], label =  "Acumulative " +sy)
         #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
-        pdf= ax[i].plot(x[i], y[i], label = r"PDF "+sy, c="C0", ls = "--")
+        line, = ax[i].plot(x[i], y[i], label = r"PDF "+sy, c="C0", ls = "-")
+        ax[i].set_xlim(0,20); ax[i].set_ylim(0,1.05)
+        ax[i].set_xlabel(name); 
+        ax[i].tick_params(axis='both')
+        ax[i].set_title(titles[i])
+        
         a0 = ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1")
         a1 = ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2")
         a2 = ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3")
         p1 = ax[i].axvline(x = obs, ls='--', c="k", lw = 1.25)
-        p2 = ax[i].axvspan(obs-dobs, obs+dobs, alpha = .2, color ='k')
+        p2 = ax[i].fill_between( np.array([obs-dobs, obs+dobs]), -.5, 1.5, alpha = .2, color ='k')
 
-        ax[i].set_xlim(0,20)
-        ax[i].set_xlabel(name); 
-        ax[i].tick_params(axis='both')
-        ax[i].set_title(titles[i])
-        ax[i].legend((pdf,a0,a1,a2,(p1,p2),),(r"PDF",
-                                           r"25\% = "+str(round_sig(marginal_com[i].p_25, sf)) + " AU",
-                                           r"50\% = "+str(round_sig(marginal_com[i].p_50, sf)) + " AU",
-                                           r"75\% = "+str(round_sig(marginal_com[i].p_75, sf)) + " AU",
-                                             r"Obs = "+str(round_sig(obs, sf))+r"$\pm$"+str(round_sig(dobs, sf))+" AU",), handletextpad=.4, labelspacing=.25) 
+        ax[i].legend([line,a0,a1,a2,(p1,p2)],[r"PDF: " + sy,
+                                              r"25\% = "+str(round_sig(marginal_com[i].p_25, sf))+" AU",
+                                              r"50\% = "+str(round_sig(marginal_com[i].p_50, sf))+" AU",
+                                              r"75\% = "+str(round_sig(marginal_com[i].p_75, sf))+" AU",
+                                              r"Obs = "+str(round_sig(obs, sf))+
+                                              r"$\pm$"+str(round_sig(dobs, sf))+" AU"],
+                     handletextpad=.4, labelspacing=.25, loc=0) 
     
     #plt.subplots_adjust(hspace=-.5)
     fig.tight_layout()
-    #plt.savefig("images/com/"+sys+".pdf")
+    plt.savefig("images/com/"+sys+".pdf")
     plt.show()
+'''
