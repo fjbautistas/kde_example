@@ -175,11 +175,13 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     #z = [np.cumsum(marginal_md.marginal)*marginal_md.dz,np.cumsum(marginal_tau.marginal)*marginal_tau.dz]
     fig, ax = plt.subplots(1, 2, figsize=(10.9,3.9))
     for i in range(0,2):
-        ax[i].plot(x[i], y[i], label = "Probability " + sy[i], lw=2)
+        ax[i].plot(x[i], y[i], label = "PDF: " + sy[i], lw=2)
         ax[i].yaxis.set_major_locator(plt.MaxNLocator(5))
         #ax[i].plot(x[i], z[i], label = "Acumulative " + sy[i], lw = 2)
         #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":")
         ax[i].set_xlabel(name[i]); ax[i].set_ylabel(sy[i])
+        #ax[i].set_xlim(0,x[i].max()); ax[i].set_ylim(0,1.05)
+
         if i == 0:
             ax[i].axvline(x = m[i].p_25,ls='--', c="C1",label = r"25\% = "\
                           + str(round_sig(m[i].p_25, sf)) +" "+unities[i])
@@ -200,7 +202,7 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
         ax[i].legend(handletextpad=.4, labelspacing=.25, loc=0)
     #fig.text(.49, .95, "System "+sys)
     fig.tight_layout(rect=[-0.02, -0.02, 1, 1])
-    #plt.savefig("images/md_tau/"+sys+"md.pdf")
+    plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
 '''
