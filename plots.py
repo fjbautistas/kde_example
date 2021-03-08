@@ -4,6 +4,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import matplotlib.ticker as mtick
 import matplotlib as mpl
 from Methods import *
@@ -84,7 +85,7 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/n_planets/"+sys+".pdf")
     plt.show()
-'''
+
 
 def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
@@ -124,7 +125,7 @@ def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=un
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
-'''
+
 
 def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
@@ -200,11 +201,11 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     fig.tight_layout(rect=[-0.02, -0.02, 1, 1])
     plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
-
+'''
 
 #------------------------------------- For plots ------------------------------------------- 
 
-def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities):
+def mplot_com(marginal_com, obs, dobs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
     x = [marginal_com[i].z for i in range(len(marginal_com))]
     y = [marginal_com[i].marginal/marginal_com[i].marginal.max() for i in range(len(marginal_com))]
@@ -215,26 +216,24 @@ def mplot_com(marginal_com, obs, sys, name=names[2], sy=sym[2], unities=unities)
     for i in range(0,3):
         #ax[i].plot(x[i], z[i], label =  "Acumulative " +sy)
         #ax[i].axhline(0.25, ls=":"); ax[i].axhline(0.5, ls=":"); ax[i].axhline(0.75,ls=":");
-        ax[i].plot(x[i], y[i], label = r"Probability "+sy)
-        ax[i].set_xlabel(name); 
-           
-        ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1",
-                      label = r"25\% = " + str(round_sig(marginal_com[i].p_25, sf)) + " AU")
-        ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2",
-                      label = r"50\% = " + str(round_sig(marginal_com[i].p_50, sf)) + " AU")
-        ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3",
-                      label = r"75\% = " + str(round_sig(marginal_com[i].p_75, sf)) + " AU")
-        ax[i].axvline(x = obs, ls='--', c="k",
-                      label = r"observed = "+ str(round_sig(obs, sf)) + " AU" )
+        pdf= ax[i].plot(x[i], y[i], label = r"PDF "+sy, c="C0", ls = "--")
+        a0 = ax[i].axvline(x = marginal_com[i].p_25,ls='--', c="C1")
+        a1 = ax[i].axvline(x = marginal_com[i].p_50,ls='--', c="C2")
+        a2 = ax[i].axvline(x = marginal_com[i].p_75,ls='--', c="C3")
+        p1 = ax[i].axvline(x = obs, ls='--', c="k", lw = 1.25)
+        p2 = ax[i].axvspan(obs-dobs, obs+dobs, alpha = .2, color ='k')
 
+        ax[i].set_xlim(0,20)
+        ax[i].set_xlabel(name); 
         ax[i].tick_params(axis='both')
         ax[i].set_title(titles[i])
-        ax[i].legend()
+        ax[i].legend((pdf,a0,a1,a2,(p1,p2),),(r"PDF",
+                                           r"25\% = "+str(round_sig(marginal_com[i].p_25, sf)) + " AU",
+                                           r"50\% = "+str(round_sig(marginal_com[i].p_50, sf)) + " AU",
+                                           r"75\% = "+str(round_sig(marginal_com[i].p_75, sf)) + " AU",
+                                             r"Obs = "+str(round_sig(obs, sf))+r"$\pm$"+str(round_sig(dobs, sf))+" AU",), handletextpad=.4, labelspacing=.25) 
     
     #plt.subplots_adjust(hspace=-.5)
     fig.tight_layout()
-    plt.savefig("images/com/"+sys+".pdf")
+    #plt.savefig("images/com/"+sys+".pdf")
     plt.show()
-
-#------------------------------------- For plots ------------------------------------------- 
-'''

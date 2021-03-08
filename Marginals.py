@@ -16,7 +16,7 @@ data = [dn,dl,dh]
 dim = 300
 #========================================================== names, variables and unities ======================================================================================
 variables = ["md","taugas","com","Mtp","Mjup","Mrock","nplanets","ngi", "npt"]
-s= ["Kepler-289", "TRAPPIST-1", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
+s= ["Kepler-289", "KOI-94", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "WASP-47","HD 38529", "TOI-125", "EPIC 249893012"]
 
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
@@ -45,6 +45,7 @@ def predict_md_tau(sistemas, likelihoods, datal = data, obs_data = obs_data):
     mplot_md_tau(Marginls[0], Marginls[3], sistemas[0], 0)
 
 # -------- com ----------
+'''
 com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
 like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 
@@ -57,8 +58,9 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
         Marg = Marginal(likelihoods[m], p.pdf_prior, data[m].ms,
                         data[m].metal, data[m]["com"])
         Marg.pdf(); Marginls.append(Marg)
-    mplot_com(Marginls, systm.com.values[0], sistemas[0])
+    mplot_com(Marginls, systm.com.values[0], systm.dcom.values[0], sistemas[0])
 
+'''
 # -------- Masses ----------    
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
@@ -83,7 +85,6 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
     #return Marginls
     mplot_mass2(Marginls, systm.Mtp.values[0], sistemas[0])
 
-'''
 
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
@@ -111,7 +112,7 @@ def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_dat
     #return Marginls
     
 # ---- Number of planets ------   
-'''
+
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
@@ -135,5 +136,5 @@ p            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i]
         Marginls.append(m)
     mplot_num(Marginls, systm.n_planets.values[0], sistemas[0])
     return Marginls
- 
+
 '''
