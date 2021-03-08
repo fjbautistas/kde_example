@@ -20,7 +20,7 @@ s= ["Kepler-289", "KOI-94", "K2-3", "K2-138", "HAT-P-11", "GJ 9827", "Kepler-411
 
 #======================================================================== Marginals ============================================================================================
 # ----- md and tau -----  
-
+'''
 Md  = pd.read_csv('data/ls_300/like_md.csv',index_col=None);
 like_md  = [Md[str(Md.columns[i])].values.reshape(dim,dim,dim)   for i in range(1,4)]
 tau = pd.read_csv('data/ls_300/like_tgas.csv',index_col=None);
@@ -45,7 +45,7 @@ def predict_md_tau(sistemas, likelihoods = l_md_tau, datal = data, obs_data = ob
     mplot_md_tau(Marginls[0], Marginls[3], sistemas[0], 0)
 
 # -------- com ----------
-'''
+
 com = pd.read_csv('data/ls_300/like_com.csv',index_col=None);
 like_com = [com[str(com.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 
@@ -85,7 +85,7 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
     #return Marginls
     mplot_mass2(Marginls, systm.Mtp.values[0], sistemas[0])
 
-
+'''
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
@@ -108,9 +108,10 @@ def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_dat
             Marg.pdf();
             m.append(Marg)
         Marginls.append(m)
-    mplot_mass(Marginls, systm.Mtp.values[0], sistemas[0])   
+    mplot_mass(Marginls, [systm.Mtp.values[0], systm.M_gi.values[0], systm.M_r.values[0]],
+               [systm.dMtp.values[0], systm.dM_gi.values[0], systm.dM_r.values[0]], sistemas[0])   
     #return Marginls
-    
+'''
 # ---- Number of planets ------   
 
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);

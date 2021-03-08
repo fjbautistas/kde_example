@@ -87,46 +87,56 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     plt.show()
 
 
-def mplot_mass(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
-    sf = 2
+#------------------------------------- Masses ---------------------------------------- 
+'''
+def mplot_mass(marginal_mass, obs, dobs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
+    sf = 3
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
 
     fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
     for m in range(0,3):
+        #ax[m,n].set_
         for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
-            ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
-                         label = "Probability "+sy[m])
+            line = ax[m,n].plot(marginal_mass[n][m].z,
+                                marginal_mass[n][m].marginal/marginal_mass[n][m].marginal.max(),
+                                label = "PDF: "+sy[m])
             #ax[m,n].plot(marginal_mass[n][m].z, marginal_mass[n][m].inte, label = "acumulative")
-            ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1", lw = 1.5,
-                            label = r"25\% = " + str(round_sig(marginal_mass[n][m].p_25, sf))+" "+unities[m])
-            ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2", lw = 1.5,
-                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf))+" "+unities[m])
-            ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3", lw = 1.5,
-                            label = r"75\% = " + str(round_sig(marginal_mass[n][m].p_75, sf))+" "+unities[m])
             #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
             #ax[m,n].ticklabel_format(axis="x", style="sci", scilimits=(0,0), useOffset=True, useMathText=True)
+            a =ax[m,n].axvline(x = marginal_mass[n][m].p_25,ls='--', c="C1", lw = 1.5,
+                            label = r"25\% = " + str(round_sig(marginal_mass[n][m].p_25, sf))+" "+unities[m])
+            b =ax[m,n].axvline(x = marginal_mass[n][m].p_50,ls='--', c="C2", lw = 1.5,
+                            label = r"50\% = " + str(round_sig(marginal_mass[n][m].p_50, sf))+" "+unities[m])
+            c =ax[m,n].axvline(x = marginal_mass[n][m].p_75,ls='--', c="C3", lw = 1.5,
+                            label = r"75\% = " + str(round_sig(marginal_mass[n][m].p_75, sf))+" "+unities[m])
+            
+            d =ax[m,n].axvline(obs[m], ls='--', c="k", lw = 1.5,
+                            label = r"Obs = "+str(round_sig(obs[m], sf))+r"$\pm$"+
+                            str(round_sig(dobs[m], sf))+" "+unities[m])
 
-            if m == 0 :
-                ax[m,n].set_xlim(0,8);
-                ax[m,n].set_title(t[n])
-                ax[m,n].axvline(x = obs, ls='--', c="k", lw = 1.5,
-                                label = r"observed = "+str(round_sig(obs, sf))+" "+unities[m])
-                
-            elif m == 1: ax[m,n].set_xlim(0,8);
-            else: ax[m,n].set_xlim(0,35)
+            e =ax[m,n].fill_between(np.array([obs[m]-dobs[m], obs[m]+dobs[m]]), -.5, 1.5, alpha = .2, color ='k')
 
-            if n == 0 :  
-                ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
+            ax[m,n].set_ylim(0,1.05)
+
+            if n == 0:
+                ax[m,n].set_ylabel(sy[m])
+
+            if m == 0 or m == 1: ax[m,n].set_xlim(0,6); ax[m,n].set_title(t[n])
+            #elif m == 1:         ax[m,n].set_xlim(0,6)
+            else:                ax[m,n].set_xlim(0,30);ax[m,n].set_title(t[n])
+
+            #if n == 0 :  
+            #    ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
 
             ax[m,n].set_xlabel(name[m])
-            ax[m,n].legend()
+            ax[m,n].legend(handletextpad=.4, labelspacing=.25, loc=0)
             
     fig.tight_layout()
     plt.subplots_adjust(wspace=.11)
-    plt.savefig("images/masses/"+sys+".pdf")
+    #plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
 
-
+'''
 def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -165,8 +175,8 @@ def mplot_mass2(marginal_mass, obs, sys, name=names[3:6], sy=sym[3:6], unities=u
 
     
 
-#------------------------------------- For plots ------------------------------------------- 
-'''
+#------------------------------------- Md and Tau ---------------------------------------- 
+
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
     m = [marginal_md, marginal_tau]
@@ -205,8 +215,7 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     plt.savefig("images/md_tau/"+sys+"md.pdf")
     plt.show()
 
-'''
-#------------------------------------- For plots ------------------------------------------- 
+#------------------------------------- COM ------------------------------------------- 
 
 def mplot_com(marginal_com, obs, dobs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
