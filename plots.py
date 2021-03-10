@@ -41,7 +41,7 @@ def round_sig(x, sig=2):
 
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
-
+'''
 def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     sf, lw = 2, 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -94,7 +94,57 @@ def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/n_planets/"+sys+".pdf")
     plt.show()
+'''
 
+def mplot_num2(marginal, obs, sys, name=names[7:9], sy=sym[7:9], t = titles):
+    sf = 2; marginal_num = marginal[0][1:3]; lw = 2
+    #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
+    fig, ax = plt.subplots(1, 2, sharey=True, figsize=(9.6, 4.2))
+    for n in range(0,2): #take care the likelihoods are transponed respect the plot order
+        #xsprint(n)
+        #if n == 0 : ax[n].set_xlim(0,6);
+        ax[n].set_ylim(0,1.05)
+        ax[n].plot(marginal_num[n].z, marginal_num[n].marginal/marginal_num[n].marginal.max(),
+                   label = "PDF: "+sy[n])
+        ax[n].set_ylabel(sy[n]); 
+        
+        if n == 0 :
+            ax[n].set_xlim(0,3.5);
+            
+            if  round(marginal_num[n].p_25) == 0 and round(marginal_num[n].p_25) == 0:
+                ax[n].axvline(x = round(marginal_num[n].p_75), ls='--', c="C3", lw = 1.5,
+                              label = r"75\% = " + str(round(marginal_num[n].p_75)))
+                ax[n].axvline(x = 4, ls='-.',lw = lw,  c="C4",label = r"Solar System = "+str(4))
+                ax[n].axvline(x = obs[n], ls='-',lw = lw,  c="k",label = r"Observed = "+  str(round(obs[n])))
+
+            elif round(marginal_num[n].p_25) == 0:
+                ax[n].axvline(x = round(marginal_num[n].p_50), ls='--', c="C3", lw = 1.5,
+                              label = r"50\% = " + str(round(marginal_num[n].p_50)))
+                ax[n].axvline(x = round(marginal_num[n].p_75), ls='--', c="C3", lw = 1.5,
+                              label = r"75\% = " + str(round(marginal_num[n].p_75)))
+                ax[n].axvline(x = 4, ls='-.',lw = lw,  c="C4",label = r"Solar System = "+str(4))
+                ax[n].axvline(x = obs[n], ls='-',lw = lw,  c="k",label = r"Observed = "+  str(round(obs[n])))
+            
+        else:
+            ax[n].set_xlim(0,30)
+            ax[n].axvline(x = round(marginal_num[n].p_25), ls='--', c="C1", lw = 1.5, 
+                            label = r"25\% = " + str(round(marginal_num[n].p_25)))
+            ax[n].axvline(x = round(marginal_num[n].p_50), ls='--', c="C2", lw = 1.5, 
+                            label = r"50\% = " + str(round(marginal_num[n].p_50)))
+            ax[n].axvline(x = round(marginal_num[n].p_75), ls='--', c="C3", lw = 1.5,
+                            label = r"75\% = " + str(round(marginal_num[n].p_75)))
+            ax[n].axvline(x = 4, ls='-.', lw = lw,  c="C4", label = r"Solar System = "+str(4))
+            ax[n].axvline(x = obs[n], ls='-', lw = lw, c="k",
+                            label = r"observed = "+str(round(obs[n])))
+            
+        ax[n].set_xlabel(name[n])
+        ax[n].legend(handletextpad=.4, labelspacing=.25, loc=0)
+    
+    fig.tight_layout()
+    plt.subplots_adjust(wspace=.11)
+    plt.savefig("images/n_planets/"+sys+"_2.pdf")
+    plt.show()
+    
 '''    
 #------------------------------------- Masses ---------------------------------------- 
 def mplot_mass(marginal_mass, obs, dobs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):

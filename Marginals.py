@@ -139,8 +139,7 @@ def predict_num(sistemas, likelihoods = like_num, data = data, obs_data = obs_da
             Marg.pdf();
             m.append(Marg)
         Marginls.append(m)
-    #return Marginls
-    mplot_num(Marginls, [systm.n_planets.values[0], systm.N_gi.values[0], systm.N_r.values[0]], sistemas[0])
+    mplot_num2(Marginls, [systm.n_planets.values[0], systm.N_gi.values[0], systm.N_r.values[0]], sistemas[0])
     #return Marginls
 
 
