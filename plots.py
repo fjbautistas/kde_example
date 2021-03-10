@@ -22,12 +22,12 @@ names = [r"Mass of Disk $M_d$ [$M_\odot$]", r"Dissipation time $\tau_g$ [y]",
          r"Total planetary mass $M_{tp}$ [$M_\text{Jup}$]",
          r"Total giant planetary mass $M_{\jupiter}$ [$M_\text{Jup}$]",
          r"Total of rocky planetary mass $M_{r}$ [$M_{\oplus}$]", r"Number of total planets $N_{t}$",
-         r"Number of giants planets $N_{\jupiter}$", r"Number of rocky planets $N_{\oplus}$"]
+         r"Number of giants planets $N_{\jupiter}$", r"Number of rocky planets $N_{r}$"]
 
 sym   = [r"$p\left(M_d\right)$", r"$p\left(\tau_g\right)$", r"$p\left(r_{\text{cm}}\right)$",
          r"$p\left(M_{tp}\right)$", r"$p\left(M_{\jupiter}\right)$",
          r"$p\left(M_{r}\right)$", r"$p\left(N_{t}\right)$",
-         r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{\oplus}\right)$"]
+         r"$p\left(N_{\jupiter}\right)$",r"$p\left(N_{r}\right)$"]
 
 unities = [r"$M_\odot$", r"y", r"AU", r"$M_\text{Jup}$", r"$M_\text{Jup}$", r"$M_\oplus$"]
 
@@ -36,62 +36,67 @@ titles = ["No perturbations","Low perturbations","High perturbations"]
 #--------significant figures
 from math import log10, floor
 def round_sig(x, sig=2):
-    #if x == 0:
-    #    r = 0
-    #else:
-        r = round(x, sig-int(floor(log10(abs(x))))-1)
-        return r
+    r = round(x, sig-int(floor(log10(abs(x))))-1)
+    return r
 
 #======================================== plots ============================================
 #------------------------------------- For plots -------------------------------------------
-'''
+
 def mplot_num(marginal_num, obs, sys, name=names[6:9], sy=sym[6:9], t = titles):
     sf, lw = 2, 2
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
-
     fig, ax = plt.subplots(3, 3, sharey=True, figsize=(14.5, 12))
     for m in range(0,3):
-        for n in range(0,3): #take care the likelihoods are transponed respect the plot order 
+        for n in range(0,3): #take care the likelihoods are transponed respect the plot order
+            ax[m,n].set_ylim(0,1.05)
             ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].marginal/marginal_num[n][m].marginal.max(),
-                         label = "Probability "+sy[m])
+                         label = "PDF: "+sy[m])
+            if n == 0 :  
+                ax[m,n].set_ylabel(sy[m]);
             #ax[m,n].plot(marginal_num[n][m].z, marginal_num[n][m].inte, label = "acumulative")
             #ax[m,n].axhline(0.25, ls=":"); ax[m,n].axhline(0.5, ls=":"); ax[m,n].axhline(0.75,ls=":")
-            if m == 2 :  
-                ax[m,n].axvline(x = 4, ls='-', lw = lw,  c="C4", label = r"Solar System = "+str(4))
-
             if m == 0 :
-                ax[m,n].set_title(t[n])
-                ax[m,n].axvline(x = 8, ls='-',lw = lw,  c="C4",label = r"Solar System = "+str(8))
-                ax[m,n].axvline(x = obs, ls='-',lw = lw,  c="k",label = r"observed = "+  str(round(obs)))
-                
-            if m == 1:
-                ax[m,n].axvline(x = 4, ls='-', lw = lw, c="C4",
-                                label = r"Solar System = "+str(4))
-                ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
-                                label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
-                ax[m,n].set_xlim(0,3)
-                
-            else: 
+                ax[m,n].set_title(t[n]); ax[m,n].set_xlim(0,30); 
                 ax[m,n].axvline(x = round(marginal_num[n][m].p_25), ls='--', c="C1", lw = 1.5, 
                                 label = r"25\% = " + str(round(marginal_num[n][m].p_25)))
                 ax[m,n].axvline(x = round(marginal_num[n][m].p_50), ls='--', c="C2", lw = 1.5, 
                                 label = r"50\% = " + str(round(marginal_num[n][m].p_50)))
                 ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
                                 label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
+                ax[m,n].axvline(x = 8, ls='-.',lw = lw,  c="C4",label = r"Solar System = "+str(8))
+                ax[m,n].axvline(x = obs[m], ls='-',lw = lw,  c="k",label = r"Observed = "+  str(round(obs[m])))
                 
-            if n == 0 :  
-                ax[m,n].set_ylabel(sy[m]);# ax[1,n].set_ylabel(sy[1]); ax[2,n].set_ylabel(sy[2])
+            elif m == 1:
+                ax[m,n].set_xlim(0,3)
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
+                                label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
+                ax[m,n].axvline(x = 4, ls='-.', lw = lw, c="C4",
+                                label = r"Solar System = "+str(4))
+                ax[m,n].axvline(x = obs[m], ls='-', lw = lw, c="k",
+                                label = r"observed = "+str(round(obs[m])))
+                
+            else:
+                ax[m,n].set_xlim(0,30)
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_25), ls='--', c="C1", lw = 1.5, 
+                                label = r"25\% = " + str(round(marginal_num[n][m].p_25)))
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_50), ls='--', c="C2", lw = 1.5, 
+                                label = r"50\% = " + str(round(marginal_num[n][m].p_50)))
+                ax[m,n].axvline(x = round(marginal_num[n][m].p_75), ls='--', c="C3", lw = 1.5,
+                                label = r"75\% = " + str(round(marginal_num[n][m].p_75)))
+                ax[m,n].axvline(x = 4, ls='-.', lw = lw,  c="C4", label = r"Solar System = "+str(4))
+                ax[m,n].axvline(x = obs[m], ls='-', lw = lw, c="k",
+                                label = r"observed = "+str(round(obs[m])))
                 
             ax[m,n].set_xlabel(name[m])
-            ax[m,n].legend()
+            ax[m,n].legend(handletextpad=.4, labelspacing=.25, loc=0)
             
     fig.tight_layout()
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/n_planets/"+sys+".pdf")
     plt.show()
 
+'''    
 #------------------------------------- Masses ---------------------------------------- 
-
 def mplot_mass(marginal_mass, obs, dobs, sys, name=names[3:6], sy=sym[3:6], unities=unities[3:6], t = titles):
     sf = 3
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -138,7 +143,7 @@ def mplot_mass(marginal_mass, obs, dobs, sys, name=names[3:6], sy=sym[3:6], unit
     plt.savefig("images/masses/"+sys+".pdf")
     plt.show()
 
-'''
+
 def mplot_mass2(marginal, obs, dobs, sys, name=names[4:6], sy=sym[4:6], unities=unities[4:6]):
     sf = 3; marginal_mass = marginal[0][1:3]
     #z = [np.cumsum(marginal_com[i].marginal)*marginal_com[i].dz for i in range(len(marginal_com))]
@@ -182,9 +187,7 @@ def mplot_mass2(marginal, obs, dobs, sys, name=names[4:6], sy=sym[4:6], unities=
     plt.subplots_adjust(wspace=.11)
     plt.savefig("images/masses/"+sys+"_2.pdf")
     plt.show()
-
     
-'''
 #------------------------------------- Md and Tau ---------------------------------------- 
 def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unities=unities):
     sf= 2
@@ -225,7 +228,6 @@ def mplot_md_tau(marginal_md, marginal_tau, sys, obs, name=names, sy=sym, unitie
     plt.show()
 
 #------------------------------------- COM ------------------------------------------- 
-
 def mplot_com(marginal_com, obs, dobs, sys, name=names[2], sy=sym[2], unities=unities):
     sf = 2
     x = [marginal_com[i].z for i in range(len(marginal_com))]

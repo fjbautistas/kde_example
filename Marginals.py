@@ -62,7 +62,7 @@ def predict_com(sistemas, likelihoods = like_com, data = data, obs_data = obs_da
 
 
 # -------- Masses ----------    
-'''
+
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
@@ -87,7 +87,7 @@ def predict_mass2(sistemas, likelihoods = like_m, data = data, obs_data = obs_da
     mplot_mass2(Marginls, [systm.M_gi.values[0], systm.M_r.values[0]],
                 [systm.dM_gi.values[0], systm.dM_r.values[0]], sistemas[0])
 
-'''
+
 mtp = pd.read_csv('data/ls_300_M/like_Mtp.csv',index_col=None);
 like_mtp = [mtp[str(mtp.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)] 
 mjup= pd.read_csv('data/ls_300_M/like_Mjup.csv',index_col=None);
@@ -115,7 +115,7 @@ def predict_mass(sistemas, likelihoods = like_m, data = data, obs_data = obs_dat
     #return Marginls
 
 # ---- Number of planets ------   
-
+'''
 ngi = pd.read_csv('data/ls_300/like_ngi.csv',index_col=None);
 like_ngi = [ngi[str(ngi.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 ntp = pd.read_csv('data/ls_300/like_ntp.csv',index_col=None);
@@ -124,20 +124,23 @@ nplanets = pd.read_csv('data/ls_300/like_nplanets.csv',index_col=None);
 like_nplanets = [nplanets[str(nplanets.columns[i])].values.reshape(dim,dim,dim) for i in range(1,4)]
 like_num = [like_nplanets, like_ngi, like_ntp]
 
-def predict_num(sistemas, likelihoods, data = data, obs_data = obs_data):
-    var = ["nplanets","ngi","npt"]
+def predict_num(sistemas, likelihoods = like_num, data = data, obs_data = obs_data):
+    var = ["nplanets","ngi","n_r"]
     systm = obs_data[obs_data.sys_name == sistemas[0]]
-    Marginls = []
+    Marginls, ps = [], []
     for i in range(0,3):
-        p = prior([data[i].ms, data[i].metal],[[systm.ms, systm.dms],[systm.metal,systm.dmetal]])
+        p = prior([data[i].ms, data[i].metal],[systm.ms, systm.dms, systm.metal,systm.dmetal])
         p.prior_pdf()
+        #ps.append(p)
         #Marginls.append(p)
         m = []
         for j in range(len(likelihoods)):
-p            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i].metal, data[i][var[j]])
-            Marg.pdf(); m.append(Marg)
+            Marg = Marginal(likelihoods[j][i], p.pdf_prior, data[i].ms, data[i].metal, data[i][var[j]])
+            Marg.pdf();
+            m.append(Marg)
         Marginls.append(m)
-    mplot_num(Marginls, systm.n_planets.values[0], sistemas[0])
-    return Marginls
+    #return Marginls
+    mplot_num(Marginls, [systm.n_planets.values[0], systm.N_gi.values[0], systm.N_r.values[0]], sistemas[0])
+    #return Marginls
 
-'''
+
