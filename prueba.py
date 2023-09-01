@@ -42,5 +42,6 @@ plt.axvspan(mar.z[0], mar.z[1], color='y', alpha=0.5, lw=0)
 plt.xlim(0, 0.004)
 
 
-plt.show()
+#plt.show()
+#plt.show()
 
